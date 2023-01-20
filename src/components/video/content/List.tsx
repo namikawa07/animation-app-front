@@ -6,7 +6,7 @@ interface VideoContentListProps { }
 const VideoContentList: React.FC<VideoContentListProps> = () => {
   return (
     <>
-    <IonContent scrollEvents>
+    <IonContent scrollEvents fullscreen>
       <IonCard>
         <IonCardHeader>
           <IonCardTitle>Card Title</IonCardTitle>
