@@ -3,7 +3,22 @@
   --padding-top: 44px;
 }
 .accountImg {
-  height: calc(100vw / 3);
+  height: calc(100vw * 9 / 16);
   width: 100vw;
   object-fit: cover;
+  position: relative;
+}
+.accountAvatar {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  --background: rgba(0, 0, 0, 0);
+}
+.userName {
+  color: white;
+}
+ion-avatar {
+  --border-radius: 10px;
+  width: 65px;
+  height: 65px;
 }

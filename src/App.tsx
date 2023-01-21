@@ -73,12 +73,8 @@ const App: React.FC = () => {
           <SignupModal openPage={page}></SignupModal>
           <IonTabs>
             <IonRouterOutlet>
-              <Route exact path="/home">
-                <Home />
-              </Route>
-              <Route exact path="/account">
-                <Account />
-              </Route>
+              <Route exact path="/home" component={Home} />
+              <Route exact path="/account" component={Account} />
               <Route exact path="/">
                 <Redirect to="/home" />
               </Route>
