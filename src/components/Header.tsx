@@ -31,7 +31,7 @@ const Header: React.FC = () => {
   if (location.pathname !== '/home') {
     BackButton = (
       <IonButtons slot="start">
-        <IonBackButton text="戻る" defaultHref="/home"></IonBackButton>
+        <IonBackButton color="medium" text="" defaultHref="/home"></IonBackButton>
       </IonButtons>
     )
   }
