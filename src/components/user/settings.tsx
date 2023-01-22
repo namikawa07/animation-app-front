@@ -19,9 +19,8 @@ import {
   IonIcon,
 } from '@ionic/react'
 import { settingsOutline, filmOutline, personOutline } from 'ionicons/icons'
-import './Account.css'
 
-const Account: React.FC = () => {
+const UserSetting: React.FC = () => {
   const mySlides = useRef<HTMLIonSlidesElement>(null)
   const [currentSlide, setCurrentSlide] = useState<number>(0)
 
@@ -172,7 +171,7 @@ const Account: React.FC = () => {
             <IonGrid>
               <IonRow>
                 <IonCol size="4" size-md>
-                  <IonItem routerLink="/account/user">
+                  <IonItem routerLink="/account/userSetting">
                     <IonCard className="settings__item">
                       <IonIcon icon={personOutline}></IonIcon>
                     </IonCard>
@@ -188,4 +187,4 @@ const Account: React.FC = () => {
   )
 }
 
-export default Account
+export default UserSetting

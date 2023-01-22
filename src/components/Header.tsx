@@ -15,7 +15,7 @@ import { locationType } from '../../src/types/global'
 const Header: React.FC = () => {
   let BackButton = <></>
   const location = useLocation<locationType>()
-  if (location.pathname === '/account') {
+  if (location.pathname !== '/home') {
     BackButton = (
       <IonButtons slot="start">
         <IonBackButton text="戻る" defaultHref="/home"></IonBackButton>
