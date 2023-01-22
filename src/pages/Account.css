@@ -2,23 +2,76 @@
   height: 100vh;
   --padding-top: 44px;
 }
-.accountImg {
-  height: calc(100vw * 9 / 16);
+.account__img {
+  height: calc(100vw * 1 / 2);
   width: 100vw;
   object-fit: cover;
+}
+
+.account__content {
   position: relative;
 }
-.accountAvatar {
+
+.account__item {
   position: absolute;
-  left: 16px;
-  bottom: 16px;
+  left: 0px;
+  top: -30px;
   --background: rgba(0, 0, 0, 0);
+  --border-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  --padding-start: 10px;
 }
-.userName {
-  color: white;
+.account__info {
+  display: flex;
+  flex-flow: column;
+  margin-top: auto;
+  margin-bottom: 20px;
 }
-ion-avatar {
-  --border-radius: 10px;
-  width: 65px;
-  height: 65px;
+.account__name {
+  font-size: 20px;
+  font-weight: 800;
+}
+.account__uid {
+  font-size: 14px;
+  color: gray;
+}
+.account__avatar {
+  width: 80px;
+  height: 80px;
+  border: 5px solid white;
+  margin: 12px 12px 12px 0px;
+}
+.account__description {
+  padding-top: 65px;
+  --background: rgba(0, 0, 0, 0);
+  --border-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  --padding-start: 10px;
+  font-size: 12px;
+  line-height: 14px;
+}
+.account__counts {
+  --padding-start: 0px;
+  --border-color: rgba(0, 0, 0, 0);
+  margin-top: 10px;
+}
+.account__counts__item {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+}
+.account__counts__border {
+  height: 60%;
+  width: 1px;
+  background: gray;
+}
+.account__counts__item__count {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.account__counts__item__sub {
+  font-size: 10px;
+  color: gray;
 }
