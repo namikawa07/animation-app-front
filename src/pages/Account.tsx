@@ -15,15 +15,22 @@ import {
   IonCol,
   IonSegment,
   IonSegmentButton,
-  IonLabel,
   IonIcon,
+  IonButton,
+  IonActionSheet,
 } from '@ionic/react'
-import { settingsOutline, filmOutline, personOutline } from 'ionicons/icons'
+import {
+  settingsOutline,
+  personOutline,
+  gridOutline,
+  logOutOutline,
+} from 'ionicons/icons'
 import './Account.css'
 
 const Account: React.FC = () => {
   const mySlides = useRef<HTMLIonSlidesElement>(null)
   const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const [showActionSheet, setShowActionSheet] = useState(false)
 
   const slideOpts = {
     initialSlide: currentSlide,
@@ -68,6 +75,17 @@ const Account: React.FC = () => {
               <IonText className="account__name">並川 樹</IonText>
               <IonText className="account__uid">@tatsuki_namikawa</IonText>
             </div>
+            <IonItem
+              className="account__edit"
+              button
+              routerLink="/account/userSetting"
+              detail={false}
+              lines="none"
+              fill="outline"
+              type="button"
+            >
+              <IonText className="account__edit__text">編集</IonText>
+            </IonItem>
           </IonItem>
           <IonItem className="account__description">
             UUUM株式会社（本社：東京都港区、代表取締役社長CEO：鎌田
@@ -106,7 +124,7 @@ const Account: React.FC = () => {
             className="account__content__segment__button"
           >
             <IonIcon
-              icon={filmOutline}
+              icon={gridOutline}
               className={currentSlide === 0 ? 'active' : 'negative'}
             ></IonIcon>
           </IonSegmentButton>
@@ -171,18 +189,72 @@ const Account: React.FC = () => {
           <IonSlide>
             <IonGrid>
               <IonRow>
-                <IonCol size="4" size-md>
-                  <IonItem routerLink="/account/user">
-                    <IonCard className="settings__item">
-                      <IonIcon icon={personOutline}></IonIcon>
-                    </IonCard>
+                <IonCol size="4">
+                  <IonItem
+                    button
+                    routerLink="/account/userSetting"
+                    detail={false}
+                    lines="none"
+                    fill="outline"
+                    type="button"
+                    className="settings_item"
+                  >
+                    <div className="settings__item__content">
+                      <IonIcon
+                        className="settings__item__content__account"
+                        icon={personOutline}
+                      />
+                      <IonText className="settings__item__content__account__text">
+                        アカウント設定
+                      </IonText>
+                    </div>
                   </IonItem>
-                  <IonLabel>アカウント設定</IonLabel>
+                </IonCol>
+                <IonCol size="12">
+                  <IonButton
+                    onClick={() => setShowActionSheet(true)}
+                    expand="block"
+                    color="medium"
+                    fill="outline"
+                  >
+                    <IonText color="danger">ログアウト</IonText>
+                    <IonIcon
+                      icon={logOutOutline}
+                      slot="start"
+                      color="danger"
+                    ></IonIcon>
+                  </IonButton>
                 </IonCol>
               </IonRow>
             </IonGrid>
           </IonSlide>
         </IonSlides>
+        <IonActionSheet
+          isOpen={showActionSheet}
+          onDidDismiss={() => setShowActionSheet(false)}
+          cssClass="my-custom-class"
+          header="ログアウトしますか"
+          buttons={[
+            {
+              text: 'ログアウト',
+              role: 'destructive',
+              id: 'delete-button',
+              data: {
+                type: 'delete',
+              },
+              handler: () => {
+                console.log('Delete clicked')
+              },
+            },
+            {
+              text: '閉じる',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel clicked')
+              },
+            },
+          ]}
+        ></IonActionSheet>
       </IonContent>
     </IonPage>
   )

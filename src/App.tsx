@@ -11,17 +11,13 @@ import {
   IonIcon,
   IonPage,
 } from '@ionic/react'
-import {
-  personCircle,
-  map,
-  home,
-} from 'ionicons/icons'
+import { personCircle, map, home } from 'ionicons/icons'
 import { IonReactRouter } from '@ionic/react-router'
 import Home from './pages/Home'
 import Account from './pages/Account'
 import Header from '../src/components/Header'
 import SignupModal from '../src/components/SignupModal'
-import UserSetting from '../src/components/user/settings'
+import AccountUserSetting from './components/account/userSetting'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css'
@@ -68,13 +64,17 @@ const App: React.FC = () => {
             <IonRouterOutlet>
               <Route exact path="/home" component={Home} />
               <Route exact path="/account" component={Account} />
-              <Route exact path="/account/user" component={UserSetting} />
+              <Route
+                exact
+                path="/account/userSetting"
+                component={AccountUserSetting}
+              />
               <Route exact path="/">
                 <Redirect to="/home" />
               </Route>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
-              <IonTabButton tab="home" href="/home" >
+              <IonTabButton tab="home" href="/home">
                 <IonIcon icon={home} aria-hidden="true" />
                 <IonLabel>Home</IonLabel>
               </IonTabButton>
@@ -84,7 +84,7 @@ const App: React.FC = () => {
                 <IonLabel>Map</IonLabel>
               </IonTabButton>
 
-              <IonTabButton tab="account" href="/account" >
+              <IonTabButton tab="account" href="/account">
                 <IonIcon icon={personCircle} aria-hidden="true" />
                 <IonLabel>Account</IonLabel>
               </IonTabButton>

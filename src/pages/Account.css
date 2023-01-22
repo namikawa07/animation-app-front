@@ -35,6 +35,15 @@
   font-size: 14px;
   color: gray;
 }
+.account__edit {
+  margin-left: auto;
+}
+.account__edit__text {
+  border: 1px solid gray;
+  padding: 4px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+}
 .account__avatar {
   width: 80px;
   height: 80px;
@@ -103,5 +112,20 @@ ion-card {
   width: 24px;
   height: 24px;
 }
-.settings_item {
+.settings__item__content {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+.settings__item__content__account {
+  width: calc(100vw * 1 / 10);
+  height: calc(100vw * 1 / 10);
+  background-color: #eeeeee;
+  padding: 14px;
+  border-radius: 16px;
+  margin-bottom: 2px;
+}
+.settings__item__content__account__text {
+  font-size: 12px;
 }

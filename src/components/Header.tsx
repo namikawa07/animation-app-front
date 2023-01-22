@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   IonHeader,
   IonToolbar,
@@ -13,6 +13,8 @@ import { useLocation, useHistory } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
 
 const Header: React.FC = () => {
+  const [headerTitle, setHeaderTitle] = useState<string>('ANIMET')
+
   let BackButton = <></>
   const location = useLocation<locationType>()
   if (location.pathname !== '/home') {
@@ -22,6 +24,25 @@ const Header: React.FC = () => {
       </IonButtons>
     )
   }
+  useEffect(() => {
+    let title = ''
+    switch (location.pathname) {
+      case '/home':
+        title = 'ANIMET'
+        break
+      case '/account':
+        title = 'ANIMET'
+        break
+      case '/account/userSetting':
+        title = 'プロフィールを編集'
+        break
+      default:
+        title = 'ANIMET'
+    }
+
+    const path: string = location.pathname
+    setHeaderTitle(title)
+  }, [location])
 
   return (
     <>
@@ -33,7 +54,7 @@ const Header: React.FC = () => {
               <IonIcon slot="icon-only" ios={personCircle} md={personCircle} />
             </IonButton>
           </IonButtons>
-          <IonTitle>ANIMET</IonTitle>
+          <IonTitle>{headerTitle}</IonTitle>
         </IonToolbar>
       </IonHeader>
     </>
