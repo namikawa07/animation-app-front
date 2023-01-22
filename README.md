@@ -1,1 +1,3 @@
 # animet
+
+yarn prettier --write .

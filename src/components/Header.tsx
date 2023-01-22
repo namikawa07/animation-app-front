@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   IonHeader,
   IonToolbar,
@@ -9,21 +9,40 @@ import {
   IonBackButton,
 } from '@ionic/react'
 import { personCircle } from 'ionicons/icons'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
 
-interface HeaderProps {}
+const Header: React.FC = () => {
+  const [headerTitle, setHeaderTitle] = useState<string>('ANIMET')
 
-const Header: React.FC<HeaderProps> = () => {
   let BackButton = <></>
   const location = useLocation<locationType>()
-  if (location.pathname === '/account') {
+  if (location.pathname !== '/home') {
     BackButton = (
       <IonButtons slot="start">
         <IonBackButton text="戻る" defaultHref="/home"></IonBackButton>
       </IonButtons>
     )
   }
+  useEffect(() => {
+    let title = ''
+    switch (location.pathname) {
+      case '/home':
+        title = 'ANIMET'
+        break
+      case '/account':
+        title = 'ANIMET'
+        break
+      case '/account/userSetting':
+        title = 'プロフィールを編集'
+        break
+      default:
+        title = 'ANIMET'
+    }
+
+    const path: string = location.pathname
+    setHeaderTitle(title)
+  }, [location])
 
   return (
     <>
@@ -35,7 +54,7 @@ const Header: React.FC<HeaderProps> = () => {
               <IonIcon slot="icon-only" ios={personCircle} md={personCircle} />
             </IonButton>
           </IonButtons>
-          <IonTitle>ANIMET</IonTitle>
+          <IonTitle>{headerTitle}</IonTitle>
         </IonToolbar>
       </IonHeader>
     </>

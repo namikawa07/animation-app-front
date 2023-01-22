@@ -75,7 +75,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 
-  --ion-toolbar-background: #e8e8e8;
+  --ion-toolbar-background: #f7f7f7;
 }
 
 @media (prefers-color-scheme: dark) {

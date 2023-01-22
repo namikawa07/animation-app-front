@@ -7,9 +7,7 @@ import {
   IonContent,
 } from '@ionic/react'
 
-interface VideoContentListProps {}
-
-const VideoContentList: React.FC<VideoContentListProps> = () => {
+const VideoContentList: React.FC = () => {
   return (
     <>
       <IonContent scrollEvents fullscreen>
@@ -20,7 +18,7 @@ const VideoContentList: React.FC<VideoContentListProps> = () => {
           </IonCardHeader>
 
           <IonCardContent>
-            Here's a small text description for the card content. Nothing more,
+            Heres a small text description for the card content. Nothing more,
             nothing less.
           </IonCardContent>
         </IonCard>
@@ -31,7 +29,7 @@ const VideoContentList: React.FC<VideoContentListProps> = () => {
           </IonCardHeader>
 
           <IonCardContent>
-            Here's a small text description for the card content. Nothing more,
+            Heres a small text description for the card content. Nothing more,
             nothing less.
           </IonCardContent>
         </IonCard>
@@ -42,7 +40,7 @@ const VideoContentList: React.FC<VideoContentListProps> = () => {
           </IonCardHeader>
 
           <IonCardContent>
-            Here's a small text description for the card content. Nothing more,
+            Heres a small text description for the card content. Nothing more,
             nothing less.
           </IonCardContent>
         </IonCard>
@@ -53,7 +51,7 @@ const VideoContentList: React.FC<VideoContentListProps> = () => {
           </IonCardHeader>
 
           <IonCardContent>
-            Here's a small text description for the card content. Nothing more,
+            Heres a small text description for the card content. Nothing more,
             nothing less.
           </IonCardContent>
         </IonCard>
@@ -64,7 +62,7 @@ const VideoContentList: React.FC<VideoContentListProps> = () => {
           </IonCardHeader>
 
           <IonCardContent>
-            Here's a small text description for the card content. Nothing more,
+            Heres a small text description for the card content. Nothing more,
             nothing less.
           </IonCardContent>
         </IonCard>
