@@ -3,12 +3,13 @@
   --padding-top: 44px;
 }
 .wrapper__inner {
+  --padding-top: 55px;
   --padding-start: 24px;
   --padding-end: 24px;
   position: relative;
 }
 .wrapper__inputs {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 .wrapper__icon {
   position: absolute;

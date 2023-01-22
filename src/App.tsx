@@ -10,8 +10,19 @@ import {
   IonLabel,
   IonIcon,
   IonPage,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonModal,
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonTitle,
+  IonItem,
+  IonInput
 } from '@ionic/react'
-import { personCircle, map, home } from 'ionicons/icons'
+import { personCircle, map, home, add } from 'ionicons/icons'
 import { IonReactRouter } from '@ionic/react-router'
 import Home from './pages/Home'
 import Account from './pages/Account'
@@ -40,6 +51,8 @@ import './theme/variables.css'
 import { RefresherEventDetail } from '@ionic/core'
 import styled from 'styled-components'
 import { locationType } from '../src/types/global'
+import { OverlayEventDetail } from '@ionic/core/components';
+import Example from '../src/components/createModal'
 setupIonicReact()
 
 function doRefresh(event: CustomEvent<RefresherEventDetail>) {
@@ -53,6 +66,12 @@ function doRefresh(event: CustomEvent<RefresherEventDetail>) {
 
 const App: React.FC = () => {
   const page = useRef(null)
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
+
 
   return (
     <IonApp>
@@ -78,12 +97,7 @@ const App: React.FC = () => {
                 <IonIcon icon={home} aria-hidden="true" />
                 <IonLabel>Home</IonLabel>
               </IonTabButton>
-
-              <IonTabButton tab="map" href="/test1">
-                <IonIcon icon={map} aria-hidden="true" />
-                <IonLabel>Map</IonLabel>
-              </IonTabButton>
-
+              <IonTabButton />
               <IonTabButton tab="account" href="/account">
                 <IonIcon icon={personCircle} aria-hidden="true" />
                 <IonLabel>Account</IonLabel>
@@ -91,6 +105,12 @@ const App: React.FC = () => {
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>
+        <IonFab vertical="bottom" horizontal="center" slot="fixed">
+            <IonFabButton onClick={() => setIsOpen(true)}>
+              <IonIcon icon={add} />
+            </IonFabButton>
+          </IonFab>
+          <Example isOpen={isOpen} closeModal={closeModal}></Example>
       </IonPage>
     </IonApp>
   )
