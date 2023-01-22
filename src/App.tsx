@@ -72,7 +72,7 @@ const App: React.FC = () => {
           <Header></Header>
           <SignupModal openPage={page}></SignupModal>
           <IonTabs>
-            <IonRouterOutlet>
+            <IonRouterOutlet animated mode={'ios'}>
               <Route exact path="/home" component={Home} />
               <Route exact path="/account" component={Account} />
               <Route exact path="/">

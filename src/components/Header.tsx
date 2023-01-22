@@ -9,12 +9,10 @@ import {
   IonBackButton,
 } from '@ionic/react'
 import { personCircle } from 'ionicons/icons'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
 
-interface HeaderProps {}
-
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC = () => {
   let BackButton = <></>
   const location = useLocation<locationType>()
   if (location.pathname === '/account') {
