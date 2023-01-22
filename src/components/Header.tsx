@@ -7,13 +7,24 @@ import {
   IonButton,
   IonButtons,
   IonBackButton,
+  IonSearchbar,
+  IonContent,
 } from '@ionic/react'
-import { personCircle } from 'ionicons/icons'
+import { searchOutline, closeCircleOutline } from 'ionicons/icons'
 import { useLocation, useHistory } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
+import './Header.css'
+import SearchList from './SearchList'
 
 const Header: React.FC = () => {
   const [headerTitle, setHeaderTitle] = useState<string>('ANIMET')
+  const [isDisplaySearch, setIsDisplaySearch] = useState<boolean>(false)
+  const [searchText, setSearchText] = useState('')
+  const [isSearchModalOpen, setIsSearchListOpen] = useState<boolean>(false)
+
+  const closeSearchModal = () => {
+    setIsSearchListOpen(false)
+  }
 
   let BackButton = <></>
   const location = useLocation<locationType>()
@@ -36,7 +47,7 @@ const Header: React.FC = () => {
       case '/account/userSetting':
         title = 'プロフィールを編集'
         break
-        case '/notice':
+      case '/notice':
         title = 'お知らせ'
         break
       default:
@@ -45,20 +56,58 @@ const Header: React.FC = () => {
 
     const path: string = location.pathname
     setHeaderTitle(title)
+    setIsDisplaySearch(false)
   }, [location])
 
   return (
     <>
-      <IonHeader translucent>
+      <IonHeader translucent className="header">
         <IonToolbar>
           {BackButton}
           <IonButtons slot="end">
-            <IonButton color="medium" id="open-modal">
-              <IonIcon slot="icon-only" ios={personCircle} md={personCircle} />
-            </IonButton>
+            {isDisplaySearch ? (
+              <></>
+            ) : (
+              <IonButton
+                color="dark"
+                onClick={() => {
+                  setIsDisplaySearch(true)
+                }}
+              >
+                <IonIcon slot="icon-only" icon={searchOutline} />
+              </IonButton>
+            )}
           </IonButtons>
-          <IonTitle>{headerTitle}</IonTitle>
+          {isDisplaySearch ? (
+            <IonSearchbar
+              className="search"
+              showClearButton="always"
+              showCancelButton="always"
+              cancelButtonText="閉じる"
+              debounce={1000}
+              animated
+              onIonCancel={() => {
+                setIsDisplaySearch(false)
+              }}
+              onIonChange={(e) => setSearchText(e.detail.value!)}
+              onIonFocus={() => {
+                setIsSearchListOpen(true)
+              }}
+              onIonBlur={() => {
+                setIsSearchListOpen(false)
+              }}
+            ></IonSearchbar>
+          ) : (
+            <IonTitle>{headerTitle}</IonTitle>
+          )}
         </IonToolbar>
+        {isSearchModalOpen ? (
+          <IonContent className="search">
+            <SearchList></SearchList>
+          </IonContent>
+        ) : (
+          <></>
+        )}
       </IonHeader>
     </>
   )

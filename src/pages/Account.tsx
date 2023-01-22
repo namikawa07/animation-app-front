@@ -52,8 +52,6 @@ const Account: React.FC = () => {
     setCurrentSlide(index)
   }
 
-  const ionClass = 'active'
-
   return (
     <IonPage>
       <IonContent className="account">
