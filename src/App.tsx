@@ -20,13 +20,14 @@ import {
   IonButton,
   IonTitle,
   IonItem,
-  IonInput
+  IonInput,
 } from '@ionic/react'
 import { personOutline, home, add, notificationsOutline } from 'ionicons/icons'
 import { IonReactRouter } from '@ionic/react-router'
 import Home from './pages/Home'
 import Account from './pages/Account'
 import Header from '../src/components/Header'
+import Notice from './pages/Notice'
 import SignupModal from '../src/components/SignupModal'
 import AccountUserSetting from './components/account/userSetting'
 
@@ -49,17 +50,18 @@ import '@ionic/react/css/display.css'
 /* Theme variables */
 import './theme/variables.css'
 import './App.css'
-import Example from '../src/components/createModal'
-setupIonicReact()
+import CreatePostModal from './components/CreatePostModal'
 
+setupIonicReact()
 
 const App: React.FC = () => {
   const page = useRef(null)
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isCreatePostModalOpen, setIsCreatePostModalOpen] =
+    useState<boolean>(false)
+  const [isSignupOpen, setIsSignupOpen] = useState<boolean>(false)
 
-  const closeModal = () => {
-    setIsOpen(false)
+  const closeCreatePostModal = () => {
+    setIsCreatePostModalOpen(false)
   }
   const closeSignupModal = () => {
     setIsSignupOpen(false)
@@ -70,11 +72,16 @@ const App: React.FC = () => {
       <IonPage ref={page}>
         <IonReactRouter>
           <Header></Header>
-          <SignupModal openPage={page} isSignupOpen={isSignupOpen} closeSignupModal={closeSignupModal}></SignupModal>
+          <SignupModal
+            openPage={page}
+            isSignupOpen={isSignupOpen}
+            closeSignupModal={closeSignupModal}
+          ></SignupModal>
           <IonTabs>
             <IonRouterOutlet>
               <Route exact path="/home" component={Home} />
               <Route exact path="/account" component={Account} />
+              <Route exact path="/notice" component={Notice} />
               <Route
                 exact
                 path="/account/userSetting"
@@ -91,18 +98,21 @@ const App: React.FC = () => {
               <IonTabButton tab="notice" href="/notice">
                 <IonIcon icon={notificationsOutline} aria-hidden="true" />
               </IonTabButton>
-              <IonTabButton tab="account"onClick={() => setIsSignupOpen(true)} >
-                <IonIcon icon={personOutline} aria-hidden="true"/>
+              <IonTabButton tab="account" onClick={() => setIsSignupOpen(true)}>
+                <IonIcon icon={personOutline} aria-hidden="true" />
               </IonTabButton>
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-            <IonFabButton onClick={() => setIsOpen(true)}>
-              <IonIcon icon={add} />
-            </IonFabButton>
-          </IonFab>
-          <Example isOpen={isOpen} closeModal={closeModal}></Example>
+          <IonFabButton onClick={() => setIsCreatePostModalOpen(true)}>
+            <IonIcon icon={add} />
+          </IonFabButton>
+        </IonFab>
+        <CreatePostModal
+          isOpen={isCreatePostModalOpen}
+          closeModal={closeCreatePostModal}
+        ></CreatePostModal>
       </IonPage>
     </IonApp>
   )

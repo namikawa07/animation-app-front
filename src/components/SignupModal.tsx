@@ -22,7 +22,11 @@ interface SignupModalType {
   closeSignupModal: any
 }
 
-const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen, closeSignupModal }) => {
+const SignupModal: React.FC<SignupModalType> = ({
+  openPage,
+  isSignupOpen,
+  closeSignupModal,
+}) => {
   const modal = useRef<HTMLIonModalElement>(null)
   const [presentingElement, setPresentingElement] =
     useState<HTMLElement | null>(null)
