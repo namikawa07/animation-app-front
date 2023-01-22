@@ -31,10 +31,13 @@ const Header: React.FC = () => {
         title = 'ANIMET'
         break
       case '/account':
-        title = 'ANIMET'
+        title = 'アカウント'
         break
       case '/account/userSetting':
         title = 'プロフィールを編集'
+        break
+        case '/notice':
+        title = 'お知らせ'
         break
       default:
         title = 'ANIMET'

@@ -18,9 +18,11 @@ import {
 
 interface SignupModalType {
   openPage: { current: any }
+  isSignupOpen: boolean
+  closeSignupModal: any
 }
 
-const SignupModal: React.FC<SignupModalType> = ({ openPage }) => {
+const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen, closeSignupModal }) => {
   const modal = useRef<HTMLIonModalElement>(null)
   const [presentingElement, setPresentingElement] =
     useState<HTMLElement | null>(null)
@@ -75,6 +77,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage }) => {
 
   function dismiss() {
     modal.current?.dismiss()
+    closeSignupModal()
   }
 
   useEffect(() => {
@@ -116,6 +119,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage }) => {
       ref={modal}
       trigger="open-modal"
       presentingElement={presentingElement!}
+      isOpen={isSignupOpen}
     >
       <IonHeader>
         <IonToolbar>

@@ -22,7 +22,7 @@ import {
   IonItem,
   IonInput
 } from '@ionic/react'
-import { personCircle, map, home, add } from 'ionicons/icons'
+import { personOutline, home, add, notificationsOutline } from 'ionicons/icons'
 import { IonReactRouter } from '@ionic/react-router'
 import Home from './pages/Home'
 import Account from './pages/Account'
@@ -48,37 +48,29 @@ import '@ionic/react/css/display.css'
 
 /* Theme variables */
 import './theme/variables.css'
-import { RefresherEventDetail } from '@ionic/core'
-import styled from 'styled-components'
-import { locationType } from '../src/types/global'
-import { OverlayEventDetail } from '@ionic/core/components';
+import './App.css'
 import Example from '../src/components/createModal'
 setupIonicReact()
 
-function doRefresh(event: CustomEvent<RefresherEventDetail>) {
-  console.log('Begin async operation')
-
-  setTimeout(() => {
-    console.log('Async operation has ended')
-    event.detail.complete()
-  }, 2000)
-}
 
 const App: React.FC = () => {
   const page = useRef(null)
   const [isOpen, setIsOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   const closeModal = () => {
     setIsOpen(false)
   }
-
+  const closeSignupModal = () => {
+    setIsSignupOpen(false)
+  }
 
   return (
     <IonApp>
       <IonPage ref={page}>
         <IonReactRouter>
           <Header></Header>
-          <SignupModal openPage={page}></SignupModal>
+          <SignupModal openPage={page} isSignupOpen={isSignupOpen} closeSignupModal={closeSignupModal}></SignupModal>
           <IonTabs>
             <IonRouterOutlet>
               <Route exact path="/home" component={Home} />
@@ -95,17 +87,17 @@ const App: React.FC = () => {
             <IonTabBar slot="bottom">
               <IonTabButton tab="home" href="/home">
                 <IonIcon icon={home} aria-hidden="true" />
-                <IonLabel>Home</IonLabel>
               </IonTabButton>
-              <IonTabButton />
-              <IonTabButton tab="account" href="/account">
-                <IonIcon icon={personCircle} aria-hidden="true" />
-                <IonLabel>Account</IonLabel>
+              <IonTabButton tab="notice" href="/notice">
+                <IonIcon icon={notificationsOutline} aria-hidden="true" />
+              </IonTabButton>
+              <IonTabButton tab="account"onClick={() => setIsSignupOpen(true)} >
+                <IonIcon icon={personOutline} aria-hidden="true"/>
               </IonTabButton>
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>
-        <IonFab vertical="bottom" horizontal="center" slot="fixed">
+        <IonFab vertical="bottom" horizontal="end" slot="fixed">
             <IonFabButton onClick={() => setIsOpen(true)}>
               <IonIcon icon={add} />
             </IonFabButton>
