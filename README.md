@@ -1,14 +1,15 @@
 # animation-app-front
 
 # 使用ツール
-## UI FrameWork
-### Ionic
-
 ## JS FrameWork
-### React
+### ・　React
+
+## UI FrameWork
+### ・　Ionic
 
 ## 状態管理ツール
-### redux toolkit
+### ・　redux toolkit
+
 
 # コード整形
 ```
