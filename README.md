@@ -1,3 +1,3 @@
-# animet
+# mofluffy
 
 yarn prettier --write .

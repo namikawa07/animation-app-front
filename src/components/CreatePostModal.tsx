@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   IonButtons,
   IonButton,
@@ -7,7 +6,6 @@ import {
   IonContent,
   IonToolbar,
   IonTitle,
-  IonPage,
 } from '@ionic/react'
 
 function CreatePostModal(props: any) {
