@@ -26,6 +26,7 @@ import { personOutline, home, add, notificationsOutline } from 'ionicons/icons'
 import { IonReactRouter } from '@ionic/react-router'
 import Home from './pages/Home'
 import Account from './pages/Account'
+import AccountDetail from './pages/AccountDetail'
 import Header from '../src/components/Header'
 import Notice from './pages/Notice'
 import SignupModal from '../src/components/SignupModal'
@@ -82,11 +83,7 @@ const App: React.FC = () => {
               <Route exact path="/home" component={Home} />
               <Route exact path="/account" component={Account} />
               <Route exact path="/notice" component={Notice} />
-              <Route
-                exact
-                path="/account/userSetting"
-                component={AccountUserSetting}
-              />
+              <Route exact path="/account/detail" component={AccountDetail} />
               <Route exact path="/">
                 <Redirect to="/home" />
               </Route>

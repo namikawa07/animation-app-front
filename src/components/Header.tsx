@@ -10,14 +10,15 @@ import {
   IonSearchbar,
   IonContent,
 } from '@ionic/react'
-import { searchOutline, closeCircleOutline } from 'ionicons/icons'
-import { useLocation, useHistory } from 'react-router-dom'
+import { searchOutline } from 'ionicons/icons'
+import { useLocation } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
 import './Header.css'
 import SearchList from './SearchList'
+import styled from 'styled-components'
 
 const Header: React.FC = () => {
-  const [headerTitle, setHeaderTitle] = useState<string>('ANIMET')
+  const [headerTitle, setHeaderTitle] = useState<string>('mofluffy')
   const [isDisplaySearch, setIsDisplaySearch] = useState<boolean>(false)
   const [searchText, setSearchText] = useState('')
   const [isSearchModalOpen, setIsSearchListOpen] = useState<boolean>(false)
@@ -25,13 +26,30 @@ const Header: React.FC = () => {
   const closeSearchModal = () => {
     setIsSearchListOpen(false)
   }
+  /*
+  const HeaderIonHeader = styled(IonHeader)`
+    position: relative;
+  `
+
+  const HeaderSearchBarIonSearchbar = styled(IonSearchbar)`
+    padding-top: 12px;
+  `
+
+  const HeaderSearchListIonContent = styled(IonContent)`
+    height: calc(100vh / 2);
+  `
+  */
 
   let BackButton = <></>
   const location = useLocation<locationType>()
   if (location.pathname !== '/home') {
     BackButton = (
       <IonButtons slot="start">
-        <IonBackButton color="medium" text="" defaultHref="/home"></IonBackButton>
+        <IonBackButton
+          color="medium"
+          text=""
+          defaultHref="/home"
+        ></IonBackButton>
       </IonButtons>
     )
   }
@@ -39,7 +57,7 @@ const Header: React.FC = () => {
     let title = ''
     switch (location.pathname) {
       case '/home':
-        title = 'ANIMET'
+        title = 'mofluffy'
         break
       case '/account':
         title = 'アカウント'
@@ -51,7 +69,7 @@ const Header: React.FC = () => {
         title = 'お知らせ'
         break
       default:
-        title = 'ANIMET'
+        title = 'mofluffy'
     }
 
     const path: string = location.pathname
@@ -61,7 +79,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <IonHeader translucent className="header">
+      <IonHeader translucent>
         <IonToolbar>
           {BackButton}
           <IonButtons slot="end">
@@ -80,12 +98,10 @@ const Header: React.FC = () => {
           </IonButtons>
           {isDisplaySearch ? (
             <IonSearchbar
-              className="search"
               showClearButton="always"
               showCancelButton="always"
               cancelButtonText="閉じる"
               debounce={1000}
-              animated
               onIonCancel={() => {
                 setIsDisplaySearch(false)
               }}
@@ -102,7 +118,7 @@ const Header: React.FC = () => {
           )}
         </IonToolbar>
         {isSearchModalOpen ? (
-          <IonContent className="search">
+          <IonContent>
             <SearchList></SearchList>
           </IonContent>
         ) : (

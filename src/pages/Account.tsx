@@ -25,7 +25,7 @@ import {
   gridOutline,
   logOutOutline,
 } from 'ionicons/icons'
-import './Account.css'
+import styled from 'styled-components'
 
 const Account: React.FC = () => {
   const mySlides = useRef<HTMLIonSlidesElement>(null)
@@ -52,162 +52,348 @@ const Account: React.FC = () => {
     setCurrentSlide(index)
   }
 
+  const countList = [
+    { count: '206', text: 'フォロー中' },
+    { count: '20.0K', text: 'フォロワー' },
+    { count: '21', text: 'いいね' },
+    { count: '42.1K', text: '再生回数' },
+  ]
+
+  const postCardList = [
+    {
+      src: 'https://docs-demo.ionic.io/assets/madison.jpg',
+      alt: 'The Wisconsin State Capitol building in Madison, WI at night',
+    },
+    {
+      src: 'https://docs-demo.ionic.io/assets/madison.jpg',
+      alt: 'The Wisconsin State Capitol building in Madison, WI at night',
+    },
+    {
+      src: 'https://docs-demo.ionic.io/assets/madison.jpg',
+      alt: 'The Wisconsin State Capitol building in Madison, WI at night',
+    },
+    {
+      src: 'https://docs-demo.ionic.io/assets/madison.jpg',
+      alt: 'The Wisconsin State Capitol building in Madison, WI at night',
+    },
+  ]
+
+  const accountCardList = [{ icon: personOutline, text: 'アカウント設定' }]
+
+  // -------------------------------styled -------------------------------
+
+  const AccountWrapperIonContent = styled(IonContent)`
+    height: 100vh;
+    --padding-top: 44px;
+  `
+
+  const AccountImageIonThumbnail = styled(IonThumbnail)`
+    height: calc(100vw * 1 / 2);
+    width: 100vw;
+    object-fit: cover;
+  `
+
+  const AccountContent = styled.div`
+    position: relative;
+  `
+
+  const AccountItemIonItem = styled(IonItem)`
+    position: absolute;
+    left: 0px;
+    top: -30px;
+    --background: rgba(0, 0, 0, 0);
+    --border-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    --padding-start: 10px;
+  `
+
+  const AccountAvaterIonAvatar = styled(IonAvatar)`
+    width: 80px;
+    height: 80px;
+    border: 5px solid white;
+    margin: 12px 12px 12px 0px;
+  `
+
+  const AccountLabel = styled.div`
+    display: flex;
+    flex-flow: column;
+    margin-top: auto;
+    margin-bottom: 20px;
+  `
+
+  const AccountNameIonText = styled(IonText)`
+    font-size: 20px;
+    font-weight: 800;
+  `
+
+  const AccountUidIonText = styled(IonText)`
+    font-size: 14px;
+    color: gray;
+  `
+
+  const AccountEditButtonIonItem = styled(IonItem)`
+    margin-left: auto;
+  `
+
+  const AccountEditButtonTextIonText = styled(IonText)`
+    border: 1px solid gray;
+    padding: 4px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+  `
+
+  const AccountDescriptionIonItem = styled(IonItem)`
+    padding-top: 65px;
+    --background: rgba(0, 0, 0, 0);
+    --border-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    --padding-start: 10px;
+    font-size: 12px;
+    line-height: 14px;
+  `
+
+  const AccountCountListIonItem = styled(IonItem)`
+    --padding-start: 0px;
+    --border-color: rgba(0, 0, 0, 0);
+    margin-top: 10px;
+  `
+
+  const AccountCountListItemWrapper = styled.div`
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+  `
+
+  const AccountCountListItem = styled.div`
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+  `
+
+  const AccountCountListItemCountIonText = styled(IonText)`
+    font-weight: 700;
+    margin-bottom: 2px;
+  `
+  const AccountCountListItemTextIonText = styled(IonText)`
+    font-size: 10px;
+    color: gray;
+  `
+
+  const AccountCountListItemBorder = styled.div`
+    height: 60%;
+    width: 1px;
+    background: gray;
+  `
+
+  const AccountImageIonImg = styled(IonImg)`
+    width: calc(100vw * 3 / 10);
+    height: calc(100vw * 3 / 10);
+    object-fit: cover;
+  `
+
+  const AccountSettingsWrapper = styled.div`
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+  `
+
+  const AccountSettingsItemAccountIonIcon = styled(IonIcon)`
+    width: calc(100vw * 1 / 10);
+    height: calc(100vw * 1 / 10);
+    background-color: #eeeeee;
+    padding: 14px;
+    border-radius: 16px;
+    margin-bottom: 2px;
+  `
+
+  const AccountSettingsItemAccountIonText = styled(IonText)`
+    font-size: 12px;
+  `
+
+  const AccountChangeWrapperIonSegment = styled(IonSegment)`
+    margin: 24px auto 6px auto;
+    width: 80%;
+  `
+
+  const AccountChangeButtonIonSegmentButton = styled(IonSegmentButton)`
+    padding: 2px 0px;
+  `
+
+  const AccountSlideIonSlide = styled(IonSlide)`
+    flex-wrap: wrap;
+    padding: 0 auto;
+  `
+
+  const AccountIonCard = styled(IonCard)`
+    margin: 4px;
+  `
+
+  const AccountToggleActivePostIconIonIcon = styled(IonIcon)`
+    ${currentSlide === 0
+      ? `color: orange;
+    width: 24px;
+    height: 24px;`
+      : `
+      width: 24px;
+      height: 24px;`}
+  `
+
+  const AccountToggleActiveAccountIconIonIcon = styled(IonIcon)`
+    ${currentSlide === 1
+      ? `color: orange;
+    width: 24px;
+    height: 24px;`
+      : ` color: black;
+      width: 24px;
+      height: 24px;`}
+  `
+
+  // -------------------------------styled -------------------------------
+
   return (
     <IonPage>
-      <IonContent className="account">
-        <IonThumbnail className="account__img">
+      <AccountWrapperIonContent>
+        <AccountImageIonThumbnail>
           <IonImg
             src="https://docs-demo.ionic.io/assets/madison.jpg"
             alt="The Wisconsin State Capitol building in Madison, WI at night"
           ></IonImg>
-        </IonThumbnail>
-        <div className="account__content">
-          <IonItem className="account__item">
-            <IonAvatar className="account__avatar" color="dark">
+        </AccountImageIonThumbnail>
+        <AccountContent>
+          <AccountItemIonItem>
+            <AccountAvaterIonAvatar color="dark">
               <img
                 alt="Silhouette of a person's head"
                 src="https://ionicframework.com/docs/img/demos/avatar.svg"
               />
-            </IonAvatar>
-            <div className="account__info">
-              <IonText className="account__name">並川 樹</IonText>
-              <IonText className="account__uid">@tatsuki_namikawa</IonText>
-            </div>
-            <IonItem
-              className="account__edit"
+            </AccountAvaterIonAvatar>
+            <AccountLabel>
+              <AccountNameIonText>並川 樹</AccountNameIonText>
+              <AccountUidIonText>@tatsuki_namikawa</AccountUidIonText>
+            </AccountLabel>
+            <AccountEditButtonIonItem
               button
-              routerLink="/account/userSetting"
+              routerLink="/account/detail?type=accountSettings"
               detail={false}
               lines="none"
               fill="outline"
               type="button"
             >
-              <IonText className="account__edit__text">編集</IonText>
-            </IonItem>
-          </IonItem>
-          <IonItem className="account__description">
+              <AccountEditButtonTextIonText>編集</AccountEditButtonTextIonText>
+            </AccountEditButtonIonItem>
+          </AccountItemIonItem>
+          <AccountDescriptionIonItem>
             UUUM株式会社（本社：東京都港区、代表取締役社長CEO：鎌田
             和樹、以下、UUUM）は、任天堂株式会社（以下、任天堂）の著作物の取り扱いに関して、従前より包括的許諾を受けておりますが、このたび、業務提携先である吉本興業株式会社（以下、吉本興業）に所属するタレントのYouTubeチャン
-          </IonItem>
-        </div>
-        <IonItem className="account__counts">
-          <div className="account__counts__item">
-            <div className="account__counts__item__count">206</div>
-            <div className="account__counts__item__sub">フォロー中</div>
-          </div>
-          <div className="account__counts__border"></div>
-          <div className="account__counts__item">
-            <div className="account__counts__item__count">20.0K</div>
-            <div className="account__counts__item__sub">フォロワー</div>
-          </div>
-          <div className="account__counts__border"></div>
-          <div className="account__counts__item">
-            <div className="account__counts__item__count">21</div>
-            <div className="account__counts__item__sub">いいね</div>
-          </div>
-          <div className="account__counts__border"></div>
-          <div className="account__counts__item">
-            <div className="account__counts__item__count">43.1K</div>
-            <div className="account__counts__item__sub">再生回数</div>
-          </div>
-        </IonItem>
+          </AccountDescriptionIonItem>
+        </AccountContent>
+        <AccountCountListIonItem>
+          {countList.map((listItem, index) => {
+            index++
+            return (
+              <>
+                <AccountCountListItemWrapper>
+                  <IonItem
+                    routerLink="/account/detail?type=following"
+                    lines="none"
+                    detail={false}
+                  >
+                    <AccountCountListItem>
+                      <AccountCountListItemCountIonText>
+                        {listItem.count}
+                      </AccountCountListItemCountIonText>
+                      <AccountCountListItemTextIonText>
+                        {listItem.text}
+                      </AccountCountListItemTextIonText>
+                    </AccountCountListItem>
+                  </IonItem>
+                </AccountCountListItemWrapper>
+                {countList.length === index ? (
+                  <></>
+                ) : (
+                  <AccountCountListItemBorder></AccountCountListItemBorder>
+                )}
+              </>
+            )
+          })}
+        </AccountCountListIonItem>
 
-        <IonSegment
-          className="account__content__segment"
+        <AccountChangeWrapperIonSegment
           value={`${currentSlide}`}
           onIonChange={(e) => onSegmentChange(e)}
         >
-          <IonSegmentButton
-            value="0"
-            className="account__content__segment__button"
-          >
-            <IonIcon
+          <AccountChangeButtonIonSegmentButton value="0">
+            <AccountToggleActivePostIconIonIcon
               icon={gridOutline}
               className={currentSlide === 0 ? 'active' : 'negative'}
-            ></IonIcon>
-          </IonSegmentButton>
-          <IonSegmentButton
-            value="1"
-            className="account__content__segment__button"
-          >
-            <IonIcon
+            ></AccountToggleActivePostIconIonIcon>
+          </AccountChangeButtonIonSegmentButton>
+          <AccountChangeButtonIonSegmentButton value="1">
+            <AccountToggleActiveAccountIconIonIcon
               icon={settingsOutline}
               className={currentSlide === 1 ? 'active' : 'negative'}
-            ></IonIcon>
-          </IonSegmentButton>
-        </IonSegment>
+            ></AccountToggleActiveAccountIconIonIcon>
+          </AccountChangeButtonIonSegmentButton>
+        </AccountChangeWrapperIonSegment>
         <IonSlides
           ref={mySlides}
           options={slideOpts}
           className="slider"
           onIonSlideDidChange={(e) => onSlideChange(e)}
         >
-          <IonSlide>
+          <AccountSlideIonSlide>
             <IonGrid>
               <IonRow>
-                <IonCol size="4" size-md>
-                  <IonCard className="posts">
-                    <IonImg
-                      className="posts__img"
-                      src="https://docs-demo.ionic.io/assets/madison.jpg"
-                      alt="The Wisconsin State Capitol building in Madison, WI at night"
-                    ></IonImg>
-                  </IonCard>
-                </IonCol>
-                <IonCol size="4" size-md>
-                  <IonCard className="posts">
-                    <IonImg
-                      className="posts__img"
-                      src="https://docs-demo.ionic.io/assets/madison.jpg"
-                      alt="The Wisconsin State Capitol building in Madison, WI at night"
-                    ></IonImg>
-                  </IonCard>
-                </IonCol>
-                <IonCol size="4" size-md>
-                  <IonCard className="posts">
-                    <IonImg
-                      className="posts__img"
-                      src="https://docs-demo.ionic.io/assets/madison.jpg"
-                      alt="The Wisconsin State Capitol building in Madison, WI at night"
-                    ></IonImg>
-                  </IonCard>
-                </IonCol>
-                <IonCol size="4" size-md>
-                  <IonCard className="posts">
-                    <IonImg
-                      className="posts__img"
-                      src="https://docs-demo.ionic.io/assets/madison.jpg"
-                      alt="The Wisconsin State Capitol building in Madison, WI at night"
-                    ></IonImg>
-                  </IonCard>
-                </IonCol>
+                {postCardList.map((postCardListItem) => {
+                  return (
+                    <>
+                      <IonCol size="4" size-md>
+                        <AccountIonCard>
+                          <AccountImageIonImg
+                            src={postCardListItem.src}
+                            alt={postCardListItem.alt}
+                          ></AccountImageIonImg>
+                        </AccountIonCard>
+                      </IonCol>
+                    </>
+                  )
+                })}
               </IonRow>
             </IonGrid>
-          </IonSlide>
-          <IonSlide>
+          </AccountSlideIonSlide>
+          <AccountSlideIonSlide>
             <IonGrid>
               <IonRow>
-                <IonCol size="4">
-                  <IonItem
-                    button
-                    routerLink="/account/userSetting"
-                    detail={false}
-                    lines="none"
-                    fill="outline"
-                    type="button"
-                    className="settings_item"
-                  >
-                    <div className="settings__item__content">
-                      <IonIcon
-                        className="settings__item__content__account"
-                        icon={personOutline}
-                      />
-                      <IonText className="settings__item__content__account__text">
-                        アカウント設定
-                      </IonText>
-                    </div>
-                  </IonItem>
-                </IonCol>
+                {accountCardList.map((accountCardListItem) => {
+                  return (
+                    <>
+                      <IonCol size="4">
+                        <IonItem
+                          button
+                          routerLink="/account/userSetting"
+                          detail={false}
+                          lines="none"
+                          fill="outline"
+                          type="button"
+                        >
+                          <AccountSettingsWrapper>
+                            <AccountSettingsItemAccountIonIcon
+                              icon={accountCardListItem.icon}
+                            />
+                            <AccountSettingsItemAccountIonText>
+                              {accountCardListItem.text}
+                            </AccountSettingsItemAccountIonText>
+                          </AccountSettingsWrapper>
+                        </IonItem>
+                      </IonCol>
+                    </>
+                  )
+                })}
+
                 <IonCol size="12">
                   <IonButton
                     onClick={() => setShowActionSheet(true)}
@@ -225,7 +411,7 @@ const Account: React.FC = () => {
                 </IonCol>
               </IonRow>
             </IonGrid>
-          </IonSlide>
+          </AccountSlideIonSlide>
         </IonSlides>
         <IonActionSheet
           isOpen={showActionSheet}
@@ -253,7 +439,7 @@ const Account: React.FC = () => {
             },
           ]}
         ></IonActionSheet>
-      </IonContent>
+      </AccountWrapperIonContent>
     </IonPage>
   )
 }
