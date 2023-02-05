@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   IonPage,
   IonImg,
@@ -27,10 +27,27 @@ import {
 } from 'ionicons/icons'
 import styled from 'styled-components'
 
+import { fetchAllTodos } from '../slices/todosSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from '../store'
+import { RootState, TodoItem } from '../types'
+
 const Account: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>()
   const mySlides = useRef<HTMLIonSlidesElement>(null)
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const [showActionSheet, setShowActionSheet] = useState(false)
+
+  useEffect(() => {
+    dispatch(fetchAllTodos())
+  }, [dispatch])
+
+  // ------------------- function -------------------
+
+  const todos: any = useSelector((state: RootState) => {
+    // sliceのinitialStateを見ながら使う
+    return state.todos
+  })
 
   const slideOpts = {
     initialSlide: currentSlide,
@@ -80,157 +97,9 @@ const Account: React.FC = () => {
 
   const accountCardList = [{ icon: personOutline, text: 'アカウント設定' }]
 
+  // ------------------- function -------------------
+
   // -------------------------------styled -------------------------------
-
-  const AccountWrapperIonContent = styled(IonContent)`
-    height: 100vh;
-    --padding-top: 44px;
-  `
-
-  const AccountImageIonThumbnail = styled(IonThumbnail)`
-    height: calc(100vw * 1 / 2);
-    width: 100vw;
-    object-fit: cover;
-  `
-
-  const AccountContent = styled.div`
-    position: relative;
-  `
-
-  const AccountItemIonItem = styled(IonItem)`
-    position: absolute;
-    left: 0px;
-    top: -30px;
-    --background: rgba(0, 0, 0, 0);
-    --border-color: rgba(0, 0, 0, 0);
-    width: 100%;
-    --padding-start: 10px;
-  `
-
-  const AccountAvaterIonAvatar = styled(IonAvatar)`
-    width: 80px;
-    height: 80px;
-    border: 5px solid white;
-    margin: 12px 12px 12px 0px;
-  `
-
-  const AccountLabel = styled.div`
-    display: flex;
-    flex-flow: column;
-    margin-top: auto;
-    margin-bottom: 20px;
-  `
-
-  const AccountNameIonText = styled(IonText)`
-    font-size: 20px;
-    font-weight: 800;
-  `
-
-  const AccountUidIonText = styled(IonText)`
-    font-size: 14px;
-    color: gray;
-  `
-
-  const AccountEditButtonIonItem = styled(IonItem)`
-    margin-left: auto;
-  `
-
-  const AccountEditButtonTextIonText = styled(IonText)`
-    border: 1px solid gray;
-    padding: 4px 16px;
-    border-radius: 30px;
-    font-size: 14px;
-  `
-
-  const AccountDescriptionIonItem = styled(IonItem)`
-    padding-top: 65px;
-    --background: rgba(0, 0, 0, 0);
-    --border-color: rgba(0, 0, 0, 0);
-    width: 100%;
-    --padding-start: 10px;
-    font-size: 12px;
-    line-height: 14px;
-  `
-
-  const AccountCountListIonItem = styled(IonItem)`
-    --padding-start: 0px;
-    --border-color: rgba(0, 0, 0, 0);
-    margin-top: 10px;
-  `
-
-  const AccountCountListItemWrapper = styled.div`
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    width: 25%;
-  `
-
-  const AccountCountListItem = styled.div`
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-  `
-
-  const AccountCountListItemCountIonText = styled(IonText)`
-    font-weight: 700;
-    margin-bottom: 2px;
-  `
-  const AccountCountListItemTextIonText = styled(IonText)`
-    font-size: 10px;
-    color: gray;
-  `
-
-  const AccountCountListItemBorder = styled.div`
-    height: 60%;
-    width: 1px;
-    background: gray;
-  `
-
-  const AccountImageIonImg = styled(IonImg)`
-    width: calc(100vw * 3 / 10);
-    height: calc(100vw * 3 / 10);
-    object-fit: cover;
-  `
-
-  const AccountSettingsWrapper = styled.div`
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
-  `
-
-  const AccountSettingsItemAccountIonIcon = styled(IonIcon)`
-    width: calc(100vw * 1 / 10);
-    height: calc(100vw * 1 / 10);
-    background-color: #eeeeee;
-    padding: 14px;
-    border-radius: 16px;
-    margin-bottom: 2px;
-  `
-
-  const AccountSettingsItemAccountIonText = styled(IonText)`
-    font-size: 12px;
-  `
-
-  const AccountChangeWrapperIonSegment = styled(IonSegment)`
-    margin: 24px auto 6px auto;
-    width: 80%;
-  `
-
-  const AccountChangeButtonIonSegmentButton = styled(IonSegmentButton)`
-    padding: 2px 0px;
-  `
-
-  const AccountSlideIonSlide = styled(IonSlide)`
-    flex-wrap: wrap;
-    padding: 0 auto;
-  `
-
-  const AccountIonCard = styled(IonCard)`
-    margin: 4px;
-  `
 
   const AccountToggleActivePostIconIonIcon = styled(IonIcon)`
     ${currentSlide === 0
@@ -295,7 +164,7 @@ const Account: React.FC = () => {
           {countList.map((listItem, index) => {
             index++
             return (
-              <>
+              <div key={index}>
                 <AccountCountListItemWrapper>
                   <IonItem
                     routerLink="/account/detail?type=following"
@@ -317,7 +186,7 @@ const Account: React.FC = () => {
                 ) : (
                   <AccountCountListItemBorder></AccountCountListItemBorder>
                 )}
-              </>
+              </div>
             )
           })}
         </AccountCountListIonItem>
@@ -348,18 +217,16 @@ const Account: React.FC = () => {
           <AccountSlideIonSlide>
             <IonGrid>
               <IonRow>
-                {postCardList.map((postCardListItem) => {
+                {postCardList.map((postCardListItem, index) => {
                   return (
-                    <>
-                      <IonCol size="4" size-md>
-                        <AccountIonCard>
-                          <AccountImageIonImg
-                            src={postCardListItem.src}
-                            alt={postCardListItem.alt}
-                          ></AccountImageIonImg>
-                        </AccountIonCard>
-                      </IonCol>
-                    </>
+                    <IonCol size="4" size-md key={index}>
+                      <AccountIonCard>
+                        <AccountImageIonImg
+                          src={postCardListItem.src}
+                          alt={postCardListItem.alt}
+                        ></AccountImageIonImg>
+                      </AccountIonCard>
+                    </IonCol>
                   )
                 })}
               </IonRow>
@@ -368,29 +235,27 @@ const Account: React.FC = () => {
           <AccountSlideIonSlide>
             <IonGrid>
               <IonRow>
-                {accountCardList.map((accountCardListItem) => {
+                {accountCardList.map((accountCardListItem, index) => {
                   return (
-                    <>
-                      <IonCol size="4">
-                        <IonItem
-                          button
-                          routerLink="/account/userSetting"
-                          detail={false}
-                          lines="none"
-                          fill="outline"
-                          type="button"
-                        >
-                          <AccountSettingsWrapper>
-                            <AccountSettingsItemAccountIonIcon
-                              icon={accountCardListItem.icon}
-                            />
-                            <AccountSettingsItemAccountIonText>
-                              {accountCardListItem.text}
-                            </AccountSettingsItemAccountIonText>
-                          </AccountSettingsWrapper>
-                        </IonItem>
-                      </IonCol>
-                    </>
+                    <IonCol size="4" key={index}>
+                      <IonItem
+                        button
+                        routerLink="/account/userSetting"
+                        detail={false}
+                        lines="none"
+                        fill="outline"
+                        type="button"
+                      >
+                        <AccountSettingsWrapper>
+                          <AccountSettingsItemAccountIonIcon
+                            icon={accountCardListItem.icon}
+                          />
+                          <AccountSettingsItemAccountIonText>
+                            {accountCardListItem.text}
+                          </AccountSettingsItemAccountIonText>
+                        </AccountSettingsWrapper>
+                      </IonItem>
+                    </IonCol>
                   )
                 })}
 
@@ -445,3 +310,153 @@ const Account: React.FC = () => {
 }
 
 export default Account
+
+const AccountWrapperIonContent = styled(IonContent)`
+  height: 100vh;
+  --padding-top: 44px;
+`
+
+const AccountImageIonThumbnail = styled(IonThumbnail)`
+  height: calc(100vw * 1 / 2);
+  width: 100vw;
+  object-fit: cover;
+`
+
+const AccountContent = styled.div`
+  position: relative;
+`
+
+const AccountItemIonItem = styled(IonItem)`
+  position: absolute;
+  left: 0px;
+  top: -30px;
+  --background: rgba(0, 0, 0, 0);
+  --border-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  --padding-start: 10px;
+`
+
+const AccountAvaterIonAvatar = styled(IonAvatar)`
+  width: 80px;
+  height: 80px;
+  border: 5px solid white;
+  margin: 12px 12px 12px 0px;
+`
+
+const AccountLabel = styled.div`
+  display: flex;
+  flex-flow: column;
+  margin-top: auto;
+  margin-bottom: 20px;
+`
+
+const AccountNameIonText = styled(IonText)`
+  font-size: 20px;
+  font-weight: 800;
+`
+
+const AccountUidIonText = styled(IonText)`
+  font-size: 14px;
+  color: gray;
+`
+
+const AccountEditButtonIonItem = styled(IonItem)`
+  margin-left: auto;
+`
+
+const AccountEditButtonTextIonText = styled(IonText)`
+  border: 1px solid gray;
+  padding: 4px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+`
+
+const AccountDescriptionIonItem = styled(IonItem)`
+  padding-top: 65px;
+  --background: rgba(0, 0, 0, 0);
+  --border-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  --padding-start: 10px;
+  font-size: 12px;
+  line-height: 14px;
+`
+
+const AccountCountListIonItem = styled(IonItem)`
+  --padding-start: 0px;
+  --border-color: rgba(0, 0, 0, 0);
+  margin-top: 10px;
+`
+
+const AccountCountListItemWrapper = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+`
+
+const AccountCountListItem = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const AccountCountListItemCountIonText = styled(IonText)`
+  font-weight: 700;
+  margin-bottom: 2px;
+`
+const AccountCountListItemTextIonText = styled(IonText)`
+  font-size: 10px;
+  color: gray;
+`
+
+const AccountCountListItemBorder = styled.div`
+  height: 60%;
+  width: 1px;
+  background: gray;
+`
+
+const AccountImageIonImg = styled(IonImg)`
+  width: calc(100vw * 3 / 10);
+  height: calc(100vw * 3 / 10);
+  object-fit: cover;
+`
+
+const AccountSettingsWrapper = styled.div`
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+`
+
+const AccountSettingsItemAccountIonIcon = styled(IonIcon)`
+  width: calc(100vw * 1 / 10);
+  height: calc(100vw * 1 / 10);
+  background-color: #eeeeee;
+  padding: 14px;
+  border-radius: 16px;
+  margin-bottom: 2px;
+`
+
+const AccountSettingsItemAccountIonText = styled(IonText)`
+  font-size: 12px;
+`
+
+const AccountChangeWrapperIonSegment = styled(IonSegment)`
+  margin: 24px auto 6px auto;
+  width: 80%;
+`
+
+const AccountChangeButtonIonSegmentButton = styled(IonSegmentButton)`
+  padding: 2px 0px;
+`
+
+const AccountSlideIonSlide = styled(IonSlide)`
+  flex-wrap: wrap;
+  padding: 0 auto;
+`
+
+const AccountIonCard = styled(IonCard)`
+  margin: 4px;
+`
