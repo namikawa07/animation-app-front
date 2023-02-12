@@ -52,10 +52,18 @@ import '@ionic/react/css/display.css'
 import './theme/variables.css'
 import './App.css'
 import CreatePostModal from './components/CreatePostModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchMyProfile } from 'slices/profileSlice'
+import { AppDispatch } from './store'
 
 setupIonicReact()
 
 const App: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const profileState: any = useSelector((state: any) => {
+    return state.profileState
+  })
+
   const page = useRef(null)
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] =
     useState<boolean>(false)
@@ -67,6 +75,9 @@ const App: React.FC = () => {
   const closeSignupModal = () => {
     setIsSignupOpen(false)
   }
+  useEffect(() => {
+    dispatch(fetchMyProfile())
+  }, [dispatch])
 
   return (
     <IonApp>
@@ -95,9 +106,18 @@ const App: React.FC = () => {
               <IonTabButton tab="notice" href="/notice">
                 <IonIcon icon={notificationsOutline} aria-hidden="true" />
               </IonTabButton>
-              <IonTabButton tab="account" onClick={() => setIsSignupOpen(true)}>
-                <IonIcon icon={personOutline} aria-hidden="true" />
-              </IonTabButton>
+              {profileState.profile && profileState.profile.uuid !== '' ? (
+                <IonTabButton tab="account" href="/account">
+                  <IonIcon icon={personOutline} aria-hidden="true" />
+                </IonTabButton>
+              ) : (
+                <IonTabButton
+                  tab="account"
+                  onClick={() => setIsSignupOpen(true)}
+                >
+                  <IonIcon icon={personOutline} aria-hidden="true" />
+                </IonTabButton>
+              )}
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>

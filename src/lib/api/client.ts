@@ -1,8 +1,7 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
+import { auth } from '../../firebase'
 
-// import { auth } from '../../firebase'
-
-const client = axios.create({
+const client: AxiosInstance = axios.create({
   baseURL: 'http://localhost:3000/api/v1',
   headers: {
     'Content-Type': 'application/json',
@@ -11,12 +10,26 @@ const client = axios.create({
   responseType: 'json',
 })
 
-// client.interceptors.request.use(async (request) => {
-// const idToken = await auth.currentUser?.getIdToken()
-// if (idToken) request.headers.Authorization = `Bearer ${idToken}`
+client.interceptors.request.use(async (request) => {
+  const credential = await getCredential()
+  const idToken = await getIdToken(credential)
+  if (idToken) request.headers.Authorization = `Bearer ${idToken}`
 
-// console.log(`*******request.headers ${JSON.stringify(request.headers)}`)
-// return request
-// })
+  return request
+})
+
+const getCredential = () => {
+  return new Promise((resolve) => {
+    auth.onAuthStateChanged((user) => {
+      return resolve(user)
+    })
+  })
+}
+
+const getIdToken = (credential: any) => {
+  return new Promise((resolve) => {
+    return resolve(credential.getIdToken())
+  })
+}
 
 export default client

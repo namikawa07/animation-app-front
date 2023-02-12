@@ -34,6 +34,10 @@ import { RootState, TodoItem } from '../types'
 
 const Account: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
+  const profileState: any = useSelector((state: any) => {
+    return state.profileState
+  })
+
   const mySlides = useRef<HTMLIonSlidesElement>(null)
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const [showActionSheet, setShowActionSheet] = useState(false)
@@ -141,7 +145,7 @@ const Account: React.FC = () => {
               />
             </AccountAvaterIonAvatar>
             <AccountLabel>
-              <AccountNameIonText>並川 樹</AccountNameIonText>
+              <AccountNameIonText>{profileState.profile.name}</AccountNameIonText>
               <AccountUidIonText>@tatsuki_namikawa</AccountUidIonText>
             </AccountLabel>
             <AccountEditButtonIonItem

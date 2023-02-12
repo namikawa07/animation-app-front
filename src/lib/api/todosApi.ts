@@ -8,11 +8,9 @@ export interface PostTodoItem {
 
 class TodosApiService {
   static async getAll() {
-    console.log(`********Aaa getAll`)
     const response = await client.get(`users`).catch((error: any) => {
       throw new Error(error.message)
     })
-    console.log(`******response ${JSON.stringify(response.data)}`)
     return response.data
   }
   /*

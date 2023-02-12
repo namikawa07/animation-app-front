@@ -5,10 +5,12 @@ import {
 } from 'react-redux'
 
 import todosReducer from './slices/todosSlice'
+import profileReducer from './slices/profileSlice'
 
 export const store = configureStore({
   reducer: {
     todos: todosReducer,
+    profileState: profileReducer
   },
 })
 

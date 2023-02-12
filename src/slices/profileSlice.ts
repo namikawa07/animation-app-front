@@ -7,6 +7,7 @@ import {
 import { toast } from 'react-toastify'
 import AuthApiService from '../lib/api/authApi'
 import ProfileApiService from '../lib/api/profileApi'
+import { auth } from '../firebase'
 
 // ------------------- createAsyncThunk -------------------
 export const signUpUser = createAsyncThunk<
@@ -54,7 +55,7 @@ const initialState: ProfileStateType = {
 
 // ------------------------ Slice -------------------------
 const profileSlice = createSlice({
-  name: 'profile',
+  name: 'profileState',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

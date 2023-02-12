@@ -28,6 +28,10 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth'
 
+import { signUpUser, SignInUser } from 'slices/profileSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from 'store'
+
 interface SignupModalType {
   openPage: { current: any }
   isSignupOpen: boolean
@@ -39,6 +43,9 @@ const SignupModal: React.FC<SignupModalType> = ({
   isSignupOpen,
   closeSignupModal,
 }) => {
+  // ------------------- init -------------------
+  const dispatch = useDispatch<AppDispatch>()
+  // ------------------- init -------------------
   // ------------------- data -------------------
   const modal = useRef<HTMLIonModalElement>(null)
   const [presentingElement, setPresentingElement] =
@@ -55,12 +62,11 @@ const SignupModal: React.FC<SignupModalType> = ({
   const [currentTab, setCurrentTab] = useState<string>('signup')
 
   // ------------------- data -------------------
-
   // ------------------- file cycle  -------------------
   useEffect(() => {
+    setCurrentTab('signup')
     setPresentingElement(openPage.current)
-  }, [])
-
+  }, [isSignupOpen])
   // ------------------- file cycle  -------------------
 
   // ------------------- function -------------------
@@ -119,14 +125,18 @@ const SignupModal: React.FC<SignupModalType> = ({
   // ------------------- function firebase authentication -------------------
   const firebaseAuthSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
+        const idToken = await userCredential.user?.getIdToken()
+
         const firebaseAuthParams = {
-          access_token: null,
           refresh_token: userCredential.user.refreshToken,
+          access_token: null,
+          id_token: idToken,
           tenant_id: userCredential.user.tenantId,
+          name: userName,
         }
 
-        // dispatch(signUpUser(firebaseAuthParams))
+        dispatch(signUpUser(firebaseAuthParams))
       })
       .catch((error) => {
         // firebaseへの外部接続が失敗した場合
@@ -148,7 +158,7 @@ const SignupModal: React.FC<SignupModalType> = ({
           tenant_id: userCredential.user.tenantId,
         }
 
-        // dispatch(signUpUser(firebaseAuthParams))
+        dispatch(SignInUser(firebaseAuthParams))
       })
       .catch((error) => {
         // firebaseへの外部接続が失敗した場合
@@ -364,9 +374,7 @@ const SignupModal: React.FC<SignupModalType> = ({
         )}
 
         <IonList>{AuthFormatUnit()}</IonList>
-        {currentTab === 'reset-password' ? (
-          <></>
-        ) : (
+        {currentTab === 'signin' ? (
           <IonText
             onClick={() => {
               setCurrentTab('reset-password')
@@ -374,6 +382,8 @@ const SignupModal: React.FC<SignupModalType> = ({
           >
             パスワードをお忘れの方はこちら
           </IonText>
+        ) : (
+          <></>
         )}
         {authButtonUnit()}
       </IonContent>
