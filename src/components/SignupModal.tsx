@@ -151,13 +151,8 @@ const SignupModal: React.FC<SignupModalType> = ({
 
   const firebaseAuthSignin = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const firebaseAuthParams = {
-          access_token: null,
-          refresh_token: userCredential.user.refreshToken,
-          tenant_id: userCredential.user.tenantId,
-        }
-
+      .then(() => {
+        const firebaseAuthParams = {}
         dispatch(SignInUser(firebaseAuthParams))
       })
       .catch((error) => {

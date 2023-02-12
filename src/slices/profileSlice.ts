@@ -18,13 +18,13 @@ export const signUpUser = createAsyncThunk<
   return { myProfile: response.data }
 })
 
-export const SignInUser = createAsyncThunk<
-  { myProfile: ProfileType },
-  FirebaseAuthPasswordWithEmailType
->('profile/SignInUser', async (firebaseAuthParams) => {
-  const response = await AuthApiService.authWithFirebase(firebaseAuthParams)
-  return { myProfile: response.data }
-})
+export const SignInUser = createAsyncThunk<{ myProfile: ProfileType }, any>(
+  'profile/SignInUser',
+  async (firebaseAuthParams) => {
+    const response = await AuthApiService.authWithFirebase(firebaseAuthParams)
+    return { myProfile: response.data }
+  }
+)
 
 export const fetchMyProfile = createAsyncThunk<{ myProfile: ProfileType }>(
   'profile/fetchMyProfile',

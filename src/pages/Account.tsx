@@ -25,15 +25,19 @@ import {
   gridOutline,
   logOutOutline,
 } from 'ionicons/icons'
+import { auth } from '../firebase'
 import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
 
 import { fetchAllTodos } from '../slices/todosSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../store'
-import { RootState, TodoItem } from '../types'
+import { RootState } from '../types'
+import { toast } from 'react-toastify'
 
 const Account: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
+  const history = useHistory()
   const profileState: any = useSelector((state: any) => {
     return state.profileState
   })
@@ -41,6 +45,11 @@ const Account: React.FC = () => {
   const mySlides = useRef<HTMLIonSlidesElement>(null)
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const [showActionSheet, setShowActionSheet] = useState(false)
+
+  useEffect(() => {
+    if (profileState.profile.uuid === '' && profileState.loading)
+      history.push('/home')
+  }, [profileState])
 
   useEffect(() => {
     dispatch(fetchAllTodos())
@@ -73,6 +82,21 @@ const Account: React.FC = () => {
     setCurrentSlide(index)
   }
 
+  const signout = () => {
+    auth.onAuthStateChanged(() => {
+      auth
+        .signOut()
+        .then(() => {
+          toast.success('ログアウトしました')
+          history.push('/home')
+          window.location.reload()
+        })
+        .catch(() => {
+          toast.error('ログアウト時にエラーが発生しました')
+        })
+    })
+  }
+
   const countList = [
     { count: '206', text: 'フォロー中' },
     { count: '20.0K', text: 'フォロワー' },
@@ -103,217 +127,236 @@ const Account: React.FC = () => {
 
   // ------------------- function -------------------
 
-  // -------------------------------styled -------------------------------
-
-  const AccountToggleActivePostIconIonIcon = styled(IonIcon)`
-    ${currentSlide === 0
-      ? `color: orange;
-    width: 24px;
-    height: 24px;`
-      : `
-      width: 24px;
-      height: 24px;`}
-  `
-
-  const AccountToggleActiveAccountIconIonIcon = styled(IonIcon)`
-    ${currentSlide === 1
-      ? `color: orange;
-    width: 24px;
-    height: 24px;`
-      : ` color: black;
-      width: 24px;
-      height: 24px;`}
-  `
-
-  // -------------------------------styled -------------------------------
-
   return (
     <IonPage>
       <AccountWrapperIonContent>
-        <AccountImageIonThumbnail>
-          <IonImg
-            src="https://docs-demo.ionic.io/assets/madison.jpg"
-            alt="The Wisconsin State Capitol building in Madison, WI at night"
-          ></IonImg>
-        </AccountImageIonThumbnail>
-        <AccountContent>
-          <AccountItemIonItem>
-            <AccountAvaterIonAvatar color="dark">
-              <img
-                alt="Silhouette of a person's head"
-                src="https://ionicframework.com/docs/img/demos/avatar.svg"
-              />
-            </AccountAvaterIonAvatar>
-            <AccountLabel>
-              <AccountNameIonText>{profileState.profile.name}</AccountNameIonText>
-              <AccountUidIonText>@tatsuki_namikawa</AccountUidIonText>
-            </AccountLabel>
-            <AccountEditButtonIonItem
-              button
-              routerLink="/account/detail?type=accountSettings"
-              detail={false}
-              lines="none"
-              fill="outline"
-              type="button"
-            >
-              <AccountEditButtonTextIonText>編集</AccountEditButtonTextIonText>
-            </AccountEditButtonIonItem>
-          </AccountItemIonItem>
-          <AccountDescriptionIonItem>
-            UUUM株式会社（本社：東京都港区、代表取締役社長CEO：鎌田
-            和樹、以下、UUUM）は、任天堂株式会社（以下、任天堂）の著作物の取り扱いに関して、従前より包括的許諾を受けておりますが、このたび、業務提携先である吉本興業株式会社（以下、吉本興業）に所属するタレントのYouTubeチャン
-          </AccountDescriptionIonItem>
-        </AccountContent>
-        <AccountCountListIonItem>
-          {countList.map((listItem, index) => {
-            index++
-            return (
-              <div key={index}>
-                <AccountCountListItemWrapper>
-                  <IonItem
-                    routerLink="/account/detail?type=following"
-                    lines="none"
-                    detail={false}
-                  >
-                    <AccountCountListItem>
-                      <AccountCountListItemCountIonText>
-                        {listItem.count}
-                      </AccountCountListItemCountIonText>
-                      <AccountCountListItemTextIonText>
-                        {listItem.text}
-                      </AccountCountListItemTextIonText>
-                    </AccountCountListItem>
-                  </IonItem>
-                </AccountCountListItemWrapper>
-                {countList.length === index ? (
-                  <></>
-                ) : (
-                  <AccountCountListItemBorder></AccountCountListItemBorder>
-                )}
-              </div>
-            )
-          })}
-        </AccountCountListIonItem>
-
-        <AccountChangeWrapperIonSegment
-          value={`${currentSlide}`}
-          onIonChange={(e) => onSegmentChange(e)}
-        >
-          <AccountChangeButtonIonSegmentButton value="0">
-            <AccountToggleActivePostIconIonIcon
-              icon={gridOutline}
-              className={currentSlide === 0 ? 'active' : 'negative'}
-            ></AccountToggleActivePostIconIonIcon>
-          </AccountChangeButtonIonSegmentButton>
-          <AccountChangeButtonIonSegmentButton value="1">
-            <AccountToggleActiveAccountIconIonIcon
-              icon={settingsOutline}
-              className={currentSlide === 1 ? 'active' : 'negative'}
-            ></AccountToggleActiveAccountIconIonIcon>
-          </AccountChangeButtonIonSegmentButton>
-        </AccountChangeWrapperIonSegment>
-        <IonSlides
-          ref={mySlides}
-          options={slideOpts}
-          className="slider"
-          onIonSlideDidChange={(e) => onSlideChange(e)}
-        >
-          <AccountSlideIonSlide>
-            <IonGrid>
-              <IonRow>
-                {postCardList.map((postCardListItem, index) => {
-                  return (
-                    <IonCol size="4" size-md key={index}>
-                      <AccountIonCard>
-                        <AccountImageIonImg
-                          src={postCardListItem.src}
-                          alt={postCardListItem.alt}
-                        ></AccountImageIonImg>
-                      </AccountIonCard>
-                    </IonCol>
-                  )
-                })}
-              </IonRow>
-            </IonGrid>
-          </AccountSlideIonSlide>
-          <AccountSlideIonSlide>
-            <IonGrid>
-              <IonRow>
-                {accountCardList.map((accountCardListItem, index) => {
-                  return (
-                    <IonCol size="4" key={index}>
+        {profileState.profile.uuid === '' && profileState.loading ? (
+          <></>
+        ) : (
+          <>
+            <AccountImageIonThumbnail>
+              <IonImg
+                src="https://docs-demo.ionic.io/assets/madison.jpg"
+                alt="The Wisconsin State Capitol building in Madison, WI at night"
+              ></IonImg>
+            </AccountImageIonThumbnail>
+            <AccountContent>
+              <AccountItemIonItem>
+                <AccountAvaterIonAvatar color="dark">
+                  <img
+                    alt="Silhouette of a person's head"
+                    src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                  />
+                </AccountAvaterIonAvatar>
+                <AccountLabel>
+                  <AccountNameIonText>
+                    {profileState.profile.name}
+                  </AccountNameIonText>
+                  <AccountUidIonText>@tatsuki_namikawa</AccountUidIonText>
+                </AccountLabel>
+                <AccountEditButtonIonItem
+                  button
+                  routerLink="/account/detail?type=accountSettings"
+                  detail={false}
+                  lines="none"
+                  fill="outline"
+                  type="button"
+                >
+                  <AccountEditButtonTextIonText>
+                    編集
+                  </AccountEditButtonTextIonText>
+                </AccountEditButtonIonItem>
+              </AccountItemIonItem>
+              <AccountDescriptionIonItem>
+                UUUM株式会社（本社：東京都港区、代表取締役社長CEO：鎌田
+                和樹、以下、UUUM）は、任天堂株式会社（以下、任天堂）の著作物の取り扱いに関して、従前より包括的許諾を受けておりますが、このたび、業務提携先である吉本興業株式会社（以下、吉本興業）に所属するタレントのYouTubeチャン
+              </AccountDescriptionIonItem>
+            </AccountContent>
+            <AccountCountListIonItem>
+              {countList.map((listItem, index) => {
+                index++
+                return (
+                  <div key={index}>
+                    <AccountCountListItemWrapper>
                       <IonItem
-                        button
-                        routerLink="/account/userSetting"
-                        detail={false}
+                        routerLink="/account/detail?type=following"
                         lines="none"
-                        fill="outline"
-                        type="button"
+                        detail={false}
                       >
-                        <AccountSettingsWrapper>
-                          <AccountSettingsItemAccountIonIcon
-                            icon={accountCardListItem.icon}
-                          />
-                          <AccountSettingsItemAccountIonText>
-                            {accountCardListItem.text}
-                          </AccountSettingsItemAccountIonText>
-                        </AccountSettingsWrapper>
+                        <AccountCountListItem>
+                          <AccountCountListItemCountIonText>
+                            {listItem.count}
+                          </AccountCountListItemCountIonText>
+                          <AccountCountListItemTextIonText>
+                            {listItem.text}
+                          </AccountCountListItemTextIonText>
+                        </AccountCountListItem>
                       </IonItem>
-                    </IonCol>
-                  )
-                })}
+                    </AccountCountListItemWrapper>
+                    {countList.length === index ? (
+                      <></>
+                    ) : (
+                      <AccountCountListItemBorder></AccountCountListItemBorder>
+                    )}
+                  </div>
+                )
+              })}
+            </AccountCountListIonItem>
 
-                <IonCol size="12">
-                  <IonButton
-                    onClick={() => setShowActionSheet(true)}
-                    expand="block"
-                    color="medium"
-                    fill="outline"
-                  >
-                    <IonText color="danger">ログアウト</IonText>
-                    <IonIcon
-                      icon={logOutOutline}
-                      slot="start"
-                      color="danger"
-                    ></IonIcon>
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </AccountSlideIonSlide>
-        </IonSlides>
-        <IonActionSheet
-          isOpen={showActionSheet}
-          onDidDismiss={() => setShowActionSheet(false)}
-          cssClass="my-custom-class"
-          header="ログアウトしますか"
-          buttons={[
-            {
-              text: 'ログアウト',
-              role: 'destructive',
-              id: 'delete-button',
-              data: {
-                type: 'delete',
-              },
-              handler: () => {
-                console.log('Delete clicked')
-              },
-            },
-            {
-              text: '閉じる',
-              role: 'cancel',
-              handler: () => {
-                console.log('Cancel clicked')
-              },
-            },
-          ]}
-        ></IonActionSheet>
+            <AccountChangeWrapperIonSegment
+              value={`${currentSlide}`}
+              onIonChange={(e) => onSegmentChange(e)}
+            >
+              <AccountChangeButtonIonSegmentButton value="0">
+                {currentSlide === 0 ? (
+                  <AccountToggleActivePostIconIonIcon
+                    icon={gridOutline}
+                  ></AccountToggleActivePostIconIonIcon>
+                ) : (
+                  <AccountToggleNegativePostIconIonIcon
+                    icon={gridOutline}
+                  ></AccountToggleNegativePostIconIonIcon>
+                )}
+              </AccountChangeButtonIonSegmentButton>
+              <AccountChangeButtonIonSegmentButton value="1">
+                {currentSlide === 1 ? (
+                  <AccountToggleActiveAccountIconIonIcon
+                    icon={settingsOutline}
+                  ></AccountToggleActiveAccountIconIonIcon>
+                ) : (
+                  <AccountToggleNegativeAccountIconIonIcon
+                    icon={settingsOutline}
+                  ></AccountToggleNegativeAccountIconIonIcon>
+                )}
+              </AccountChangeButtonIonSegmentButton>
+            </AccountChangeWrapperIonSegment>
+            <IonSlides
+              ref={mySlides}
+              options={slideOpts}
+              className="slider"
+              onIonSlideDidChange={(e) => onSlideChange(e)}
+            >
+              <AccountSlideIonSlide>
+                <IonGrid>
+                  <IonRow>
+                    {postCardList.map((postCardListItem, index) => {
+                      return (
+                        <IonCol size="4" size-md key={index}>
+                          <AccountIonCard>
+                            <AccountImageIonImg
+                              src={postCardListItem.src}
+                              alt={postCardListItem.alt}
+                            ></AccountImageIonImg>
+                          </AccountIonCard>
+                        </IonCol>
+                      )
+                    })}
+                  </IonRow>
+                </IonGrid>
+              </AccountSlideIonSlide>
+              <AccountSlideIonSlide>
+                <IonGrid>
+                  <IonRow>
+                    {accountCardList.map((accountCardListItem, index) => {
+                      return (
+                        <IonCol size="4" key={index}>
+                          <IonItem
+                            button
+                            routerLink="/account/userSetting"
+                            detail={false}
+                            lines="none"
+                            fill="outline"
+                            type="button"
+                          >
+                            <AccountSettingsWrapper>
+                              <AccountSettingsItemAccountIonIcon
+                                icon={accountCardListItem.icon}
+                              />
+                              <AccountSettingsItemAccountIonText>
+                                {accountCardListItem.text}
+                              </AccountSettingsItemAccountIonText>
+                            </AccountSettingsWrapper>
+                          </IonItem>
+                        </IonCol>
+                      )
+                    })}
+
+                    <IonCol size="12">
+                      <IonButton
+                        onClick={() => setShowActionSheet(true)}
+                        expand="block"
+                        color="medium"
+                        fill="outline"
+                      >
+                        <IonText color="danger">ログアウト</IonText>
+                        <IonIcon
+                          icon={logOutOutline}
+                          slot="start"
+                          color="danger"
+                        ></IonIcon>
+                      </IonButton>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
+              </AccountSlideIonSlide>
+            </IonSlides>
+            <IonActionSheet
+              isOpen={showActionSheet}
+              onDidDismiss={() => setShowActionSheet(false)}
+              cssClass="my-custom-class"
+              header="ログアウトしますか"
+              buttons={[
+                {
+                  text: 'ログアウト',
+                  role: 'destructive',
+                  id: 'delete-button',
+                  data: {
+                    type: 'delete',
+                  },
+                  handler: () => {
+                    signout()
+                  },
+                },
+                {
+                  text: '閉じる',
+                  role: 'cancel',
+                  handler: () => {
+                    console.log('Cancel clicked')
+                  },
+                },
+              ]}
+            ></IonActionSheet>
+          </>
+        )}
       </AccountWrapperIonContent>
     </IonPage>
   )
 }
 
 export default Account
+
+const AccountToggleActivePostIconIonIcon = styled(IonIcon)`
+  color: orange;
+  width: 24px;
+  height: 24px;
+`
+
+const AccountToggleNegativePostIconIonIcon = styled(IonIcon)`
+  width: 24px;
+  height: 24px;
+`
+
+const AccountToggleActiveAccountIconIonIcon = styled(IonIcon)`
+  color: orange;
+  width: 24px;
+  height: 24px;
+`
+
+const AccountToggleNegativeAccountIconIonIcon = styled(IonIcon)`
+  color: black;
+  width: 24px;
+  height: 24px;
+`
 
 const AccountWrapperIonContent = styled(IonContent)`
   height: 100vh;
