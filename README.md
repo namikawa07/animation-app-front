@@ -1,18 +1,21 @@
 # animation-app-front
 
 # 使用ツール
+
 ## JS FrameWork
-### ・　React
+
+### ・　 React
 
 ## UI FrameWork
-### ・　Ionic
+
+### ・　 Ionic
 
 ## 状態管理ツール
-### ・　redux toolkit
 
+### ・　 redux toolkit
 
 # コード整形
+
 ```
 yarn prettier --write .
 ```
-

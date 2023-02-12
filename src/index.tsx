@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals'
 import { store } from './store'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 
 const container = document.getElementById('root')
 const root = createRoot(container!)
@@ -30,7 +30,7 @@ root.render(
           margin: '16px auto',
           borderRadius: '18px',
           fontSize: '14px',
-          zIndex: '9999'
+          zIndex: '9999',
         }}
       />
     </Provider>
