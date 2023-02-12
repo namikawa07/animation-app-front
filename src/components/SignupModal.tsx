@@ -137,6 +137,7 @@ const SignupModal: React.FC<SignupModalType> = ({
         }
 
         dispatch(signUpUser(firebaseAuthParams))
+        closeSignupModal()
       })
       .catch((error) => {
         // firebaseへの外部接続が失敗した場合
@@ -154,6 +155,7 @@ const SignupModal: React.FC<SignupModalType> = ({
       .then(() => {
         const firebaseAuthParams = {}
         dispatch(SignInUser(firebaseAuthParams))
+        closeSignupModal()
       })
       .catch((error) => {
         // firebaseへの外部接続が失敗した場合

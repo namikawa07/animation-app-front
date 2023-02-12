@@ -87,7 +87,6 @@ const Account: React.FC = () => {
       auth
         .signOut()
         .then(() => {
-          toast.success('ログアウトしました')
           history.push('/home')
           window.location.reload()
         })
