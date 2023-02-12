@@ -18,7 +18,7 @@ import SearchList from './SearchList'
 import styled from 'styled-components'
 
 const Header: React.FC = () => {
-  const [headerTitle, setHeaderTitle] = useState<string>('mofluffy')
+  const [headerTitle, setHeaderTitle] = useState<string>('moon')
   const [isDisplaySearch, setIsDisplaySearch] = useState<boolean>(false)
   const [searchText, setSearchText] = useState('')
   const [isSearchModalOpen, setIsSearchListOpen] = useState<boolean>(false)
@@ -57,7 +57,7 @@ const Header: React.FC = () => {
     let title = ''
     switch (location.pathname) {
       case '/home':
-        title = 'mofluffy'
+        title = 'moon'
         break
       case '/account':
         title = 'アカウント'
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
         title = 'お知らせ'
         break
       default:
-        title = 'mofluffy'
+        title = 'moon'
     }
 
     const path: string = location.pathname
