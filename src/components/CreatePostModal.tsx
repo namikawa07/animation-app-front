@@ -168,12 +168,16 @@ function CreatePostModal(props: any) {
             {isPublish() ? (
               <PublishButton>投稿する</PublishButton>
             ) : (
-              <DisablePublishButton>投稿する</DisablePublishButton>
+              <DisableButton>投稿する</DisableButton>
             )}
           </form>
         ) : (
           <form onSubmit={handleSubmit}>
-            <DraftButton>下書き保存</DraftButton>
+            {isPublish() ? (
+              <DraftButton>下書き保存</DraftButton>
+            ) : (
+              <DisableButton>下書き保存</DisableButton>
+            )}
           </form>
         )}
       </Wrapper>
@@ -257,20 +261,19 @@ const HeadContents = styled.div`
 `
 const PublishStatusButton = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   background: #545454;
   border-radius: 12px;
   border: 1px solid #b7e7ca;
   padding: 2px 12px;
-  max-width: 80px;
+  max-width: 77px;
 `
 
 const PublishStatusButtonText = styled.span`
   font-size: 12px;
   font-weight: 700;
   line-height: 14px;
-  margin-right: 3px;
 `
 
 const PublishStatusButtonArrow = styled.div`
@@ -314,7 +317,7 @@ const PublishButton = styled.button`
   letter-spacing: 0.03em;
 `
 
-const DisablePublishButton = styled.button`
+const DisableButton = styled.button`
   width: 100%;
   background: #434343;
   color: #939393;
