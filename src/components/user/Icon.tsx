@@ -14,8 +14,8 @@ const UserIcon: React.FC = () => {
 export default UserIcon
 
 const UserIconWrapper = styled.div`
-  width: 52px;
-  height: 52px;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(#ffe7ac, #e2907d);
   display: flex;
   align-items: center;
@@ -24,8 +24,8 @@ const UserIconWrapper = styled.div`
 `
 
 const UserIconInner = styled.div`
-  width: 46px;
-  height: 46px;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
   background-color: white;
   display: flex;
   align-items: center;
@@ -34,7 +34,7 @@ const UserIconInner = styled.div`
 `
 
 const UserIconAvatar = styled.img`
-  width: 44px;
-  height: 44px;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
   border-radius: 50%;
 `

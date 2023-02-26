@@ -1,29 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import postApiService from '../lib/api/postApi'
-import { fetchAllPosts } from './postsSlice'
 
 // ------------------- createAsyncThunk -------------------
-export const createPost = createAsyncThunk<{ post: any }, any>(
-  'post/createPost',
-  async (post) => {
-    const response = await postApiService.create(post)
-    return { post: response.data }
+export const fetchAllPosts = createAsyncThunk<any>(
+  'post/fetchAllPosts',
+  async () => {
+    const response = await postApiService.fetchAll()
+    console.log(response.data)
+    return { posts: response.data }
   }
 )
-
 // ------------------- createAsyncThunk -------------------
 
 // --------------------- initialState ---------------------
 const initialState: any = {
-  post: {
-    type: '',
-    url: '',
-    title: '',
-    description: '',
-    status: null,
-    user: {},
-  },
+  posts: [],
   loading: false,
   error: {
     status: null,
@@ -33,29 +25,24 @@ const initialState: any = {
 // --------------------- initialState ---------------------
 
 // ------------------------ Slice -------------------------
-const postSlice = createSlice({
-  name: 'postState',
+const postsSlice = createSlice({
+  name: 'postsState',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createPost.fulfilled, (state, action) => {
+    builder.addCase(fetchAllPosts.fulfilled, (state, action) => {
       state.loading = true
       state.error.status = false
-      state.post = action.payload.post
-
-      if (state.post.status === 'publish') toast.success('投稿しました！')
-      if (state.post.status === 'draft') toast.success('下書きを保存しました！')
-
-      fetchAllPosts()
+      state.posts = action.payload.posts
     })
-    builder.addCase(createPost.rejected, (state) => {
+    builder.addCase(fetchAllPosts.rejected, (state) => {
       // apiの通信がうまくいかなかった時のerror
       state.loading = true
       state.error.status = true
 
       console.log(`========================= Error create post`)
     })
-    builder.addCase(createPost.pending, (state) => {
+    builder.addCase(fetchAllPosts.pending, (state) => {
       state.loading = false
       state.error.status = null
       state.error.message = null
@@ -64,4 +51,4 @@ const postSlice = createSlice({
 })
 // ------------------------ Slice -------------------------
 
-export default postSlice.reducer
+export default postsSlice.reducer

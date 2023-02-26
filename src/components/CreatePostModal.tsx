@@ -1,4 +1,4 @@
-import { useRef, useState, createRef } from 'react'
+import { useState, useEffect } from 'react'
 import {
   IonButtons,
   IonButton,
@@ -14,7 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
 
 import { createPost } from 'slices/postSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from 'store'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { storage } from '../firebase'
@@ -27,7 +27,6 @@ function CreatePostModal(props: any) {
 
   const { isOpen, closeModal } = props
 
-  const [imageFile, setImage] = useState<any>(null)
   const [imageUrl, setImageUrl] = useState<string>('')
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
@@ -35,8 +34,16 @@ function CreatePostModal(props: any) {
   const [publishStatus, setPublishStatus] = useState<string>('publish')
   const [showActionSheet, setShowActionSheet] = useState(false)
 
+  const postState: any = useSelector((state: any) => {
+    return state.postState
+  })
+
+  useEffect(() => {
+    if (postState.loading === true && postState.error.status === false)
+      resetInput()
+  }, [postState])
+
   const handleChange = async (e: any) => {
-    setImage(e.target.files[0])
     try {
       // 圧縮したらsizeは使わない方がいい
       const img = e.target.files[0]
@@ -61,16 +68,14 @@ function CreatePostModal(props: any) {
     if (!isPublish()) return
 
     const post = {
+      contents_type: 'video',
       url: imageUrl,
-      type: 'video',
-      status: publishStatus,
       title: title,
       description: description,
+      status: publishStatus,
     }
-    console.log(post)
-    /*
+
     dispatch(createPost(post))
-    */
   }
 
   const isPublish = () => {
@@ -85,6 +90,13 @@ function CreatePostModal(props: any) {
     } else {
       return true
     }
+  }
+
+  const resetInput = () => {
+    setTitle('')
+    setDescription('')
+    setImageUrl('')
+    closeModal()
   }
 
   return (
@@ -109,12 +121,12 @@ function CreatePostModal(props: any) {
               </PublishStatusButtonText>
               <PublishStatusButtonArrow>▼</PublishStatusButtonArrow>
             </PublishStatusButton>
-            <TagInputArea>
+            {/*  <TagInputArea>
               <TagAddText>タグを追加...</TagAddText>
               <TagPlusButton>
                 <span>+</span>
               </TagPlusButton>
-            </TagInputArea>
+            </TagInputArea>*/}
           </PublishStatusArea>
         </HeadContents>
         <div>
