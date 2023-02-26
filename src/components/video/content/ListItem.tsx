@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import VideoPlayer from '../Player'
 import styled from 'styled-components'
 import UserIcon from '../../user/Icon'
@@ -6,41 +5,42 @@ import UserIcon from '../../user/Icon'
 const VideoContentList: React.FC<any> = (props: any) => {
   const { post } = props
 
-  const titleRef: any = useRef(null)
-
-  const videoPlayerStyleFunc: React.CSSProperties = {
-    marginBottom: `${titleRef.current?.clientHeight}px`,
-  }
-
   return (
     <>
-      <div>
-        <VideoPlayerWrapper style={videoPlayerStyleFunc}>
-          <VideoPlayer videoUrl={post.video.url} />
-          {post.title ? (
-            <VideoTitle ref={titleRef}>{post.title}</VideoTitle>
+      {post.title ? (
+        <>
+          <VideoPlayerWrapper>
+            <VideoPlayer videoUrl={post.video.url} />
+            {post.title ? <VideoTitle>{post.title}</VideoTitle> : <></>}
+          </VideoPlayerWrapper>
+          <HiddenArea>{post.title}</HiddenArea>
+        </>
+      ) : (
+        <>
+          <VideoPlayerWrapperNoTitle>
+            <VideoPlayer videoUrl={post.video.url} />
+            {post.title ? <VideoTitle>{post.title}</VideoTitle> : <></>}
+          </VideoPlayerWrapperNoTitle>
+          <HiddenArea>{post.title}</HiddenArea>
+        </>
+      )}
+      <CreatorWrapper>
+        <UserIconWrapper>
+          <UserIcon></UserIcon>
+        </UserIconWrapper>
+        <CreatorInfoWrapper>
+          {post.description ? (
+            <>
+              <CreatorLabelWrapper>{CreatorLabel(post)}</CreatorLabelWrapper>
+              <PostDescription>{post.description}</PostDescription>
+            </>
           ) : (
-            <></>
+            <CreatorNameNoDescription>
+              {CreatorLabel(post)}
+            </CreatorNameNoDescription>
           )}
-        </VideoPlayerWrapper>
-        <CreatorWrapper>
-          <UserIconWrapper>
-            <UserIcon></UserIcon>
-          </UserIconWrapper>
-          <CreatorInfoWrapper>
-            {post.description ? (
-              <>
-                <CreatorLabelWrapper>{CreatorLabel(post)}</CreatorLabelWrapper>
-                <PostDescription>{post.description}</PostDescription>
-              </>
-            ) : (
-              <CreatorNameNoDescription>
-                {CreatorLabel(post)}
-              </CreatorNameNoDescription>
-            )}
-          </CreatorInfoWrapper>
-        </CreatorWrapper>
-      </div>
+        </CreatorInfoWrapper>
+      </CreatorWrapper>
     </>
   )
 }
@@ -77,7 +77,21 @@ const VideoPlayerWrapper = styled.div`
   border-radius: 5px;
   margin: 0 auto;
   position: relative;
+  margin-bottom: 2px;
+`
+
+const VideoPlayerWrapperNoTitle = styled.div`
+  width: calc(100vw - 8px);
+  height: calc((100vw - 8px) * 9 / 16);
+  border: 2px solid #b7e7ca;
+  border-radius: 5px;
+  margin: 0 auto;
+  position: relative;
   margin-bottom: 8px;
+`
+
+const HiddenArea = styled.div`
+  visibility: hidden;
 `
 
 const VideoTitle = styled.span`
