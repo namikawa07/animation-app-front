@@ -21,6 +21,7 @@ const VideoContentList: React.FC = () => {
   })
 
   useEffect(() => {
+    // FIXME: 2回叩かれてしまっている
     dispatch(fetchAllPosts())
     console.log(postsState)
   }, [])
