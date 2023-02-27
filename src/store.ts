@@ -6,11 +6,15 @@ import {
 
 import todosReducer from './slices/todosSlice'
 import profileReducer from './slices/profileSlice'
+import postReducer from './slices/postSlice'
+import postsReducer from './slices/postsSlice'
 
 export const store = configureStore({
   reducer: {
     todos: todosReducer,
     profileState: profileReducer,
+    postState: postReducer,
+    postsState: postsReducer,
   },
 })
 

@@ -12,7 +12,8 @@ const client: AxiosInstance = axios.create({
 
 client.interceptors.request.use(async (request) => {
   const credential = await getCredential()
-  const idToken = await getIdToken(credential)
+  let idToken = null
+  if (credential) idToken = await getIdToken(credential)
   if (idToken) request.headers.Authorization = `Bearer ${idToken}`
 
   return request

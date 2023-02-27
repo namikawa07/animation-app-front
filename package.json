@@ -8,9 +8,12 @@
     "@capacitor/haptics": "4.1.0",
     "@capacitor/keyboard": "4.1.1",
     "@capacitor/status-bar": "4.1.1",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@firebase/auth": "^0.21.3",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
+    "@mui/material": "^5.11.10",
     "@reduxjs/toolkit": "^1.9.2",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^13.3.0",
@@ -87,7 +90,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.8.3"
+    "prettier": "^2.8.3",
+    "video.js": "^8.0.4"
   },
   "description": "An Ionic project"
 }
