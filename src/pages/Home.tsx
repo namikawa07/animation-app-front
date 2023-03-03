@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { IonContent, IonPage } from '@ionic/react'
-import VideoContentList from '../components/video/content/List'
+import PostContentList from '../components/post/content/List'
 import styled from 'styled-components'
 
 const Home: React.FC = () => {
@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   return (
     <HomeIonPage ref={page}>
       <IonContent>
-        <VideoContentList></VideoContentList>
+        <PostContentList></PostContentList>
       </IonContent>
     </HomeIonPage>
   )

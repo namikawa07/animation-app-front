@@ -9,12 +9,12 @@ import {
 } from '@ionic/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from 'store'
-import { fetchAllPosts } from '../../../../src/slices/postsSlice'
+import { fetchAllPosts } from '../../../slices/postsSlice'
 import VideoPlayer from '../Player'
-import VideoContentListItem from '../content/ListItem'
+import PostContentListItem from './ListItem'
 import styled from 'styled-components'
 
-const VideoContentList: React.FC = () => {
+const PostContentList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
   const postsState: any = useSelector((state: any) => {
     return state.postsState
@@ -31,9 +31,9 @@ const VideoContentList: React.FC = () => {
       {postsState.posts && postsState.posts.length > 0 ? (
         postsState.posts.map((post: any) => {
           return (
-            <VideoContentListItemWrapper key={post.id}>
-              <VideoContentListItem post={post}></VideoContentListItem>
-            </VideoContentListItemWrapper>
+            <PostContentListItemWrapper key={post.id}>
+              <PostContentListItem post={post}></PostContentListItem>
+            </PostContentListItemWrapper>
           )
         })
       ) : (
@@ -43,8 +43,8 @@ const VideoContentList: React.FC = () => {
   )
 }
 
-export default VideoContentList
+export default PostContentList
 
-const VideoContentListItemWrapper = styled.div`
+const PostContentListItemWrapper = styled.div`
   margin-bottom: 20px;
 `

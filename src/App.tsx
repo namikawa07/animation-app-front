@@ -27,6 +27,7 @@ import { IonReactRouter } from '@ionic/react-router'
 import Home from './pages/Home'
 import Account from './pages/Account'
 import AccountDetail from './pages/AccountDetail'
+import PostId from './pages/PostId'
 import Header from '../src/components/Header'
 import Notice from './pages/Notice'
 import SignupModal from '../src/components/SignupModal'
@@ -55,6 +56,7 @@ import CreatePostModal from './components/CreatePostModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMyProfile } from 'slices/profileSlice'
 import { AppDispatch } from './store'
+import styled from 'styled-components'
 
 setupIonicReact()
 
@@ -95,6 +97,7 @@ const App: React.FC = () => {
               <Route exact path="/account" component={Account} />
               <Route exact path="/notice" component={Notice} />
               <Route exact path="/account/detail" component={AccountDetail} />
+              <Route exact path="/post/:uuid" component={PostId} />
               <Route exact path="/">
                 <Redirect to="/home" />
               </Route>
@@ -136,3 +139,7 @@ const App: React.FC = () => {
 }
 
 export default App
+
+const AppIonPage = styled(IonPage)`
+  padding-top: 48px;
+`

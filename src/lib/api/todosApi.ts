@@ -1,5 +1,4 @@
 import client from './client'
-import { TodoItem } from '../../types'
 
 export interface PostTodoItem {
   content: string
@@ -13,30 +12,5 @@ class TodosApiService {
     })
     return response.data
   }
-  /*
-  static async post(todo: PostTodoItem) {
-    await client.post(`todos`, todo).catch((error: any) => {
-      throw new Error(error.message)
-    })
-  }
-  static async toggle(todo: TodoItem) {
-    const toggledTodo = Object.assign({}, todo, { completed: !todo.completed })
-    await this.patch(toggledTodo).catch((error) => {
-      throw new Error(error.message)
-    })
-  }
-  static async patch(todo: TodoItem) {
-    await client.patch(`todos/${todo.id}`, todo).catch((error: any) => {
-      throw new Error(error.message)
-    })
-  }
-  static async delete(todo: TodoItem) {
-    await client
-      .delete(`todos/${todo.id}`, { data: todo })
-      .catch((error: any) => {
-        throw new Error(error.message)
-      })
-  }
-  */
 }
 export default TodosApiService

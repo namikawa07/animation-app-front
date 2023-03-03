@@ -1,8 +1,10 @@
 import VideoPlayer from '../Player'
 import styled from 'styled-components'
 import UserIcon from '../../user/Icon'
+import { IonItem } from '@ionic/react'
+import ActionsLabel from '../../../components/ActionsLabel'
 
-const VideoContentList: React.FC<any> = (props: any) => {
+const PostContentListItem: React.FC<any> = (props: any) => {
   const { post } = props
 
   return (
@@ -24,23 +26,32 @@ const VideoContentList: React.FC<any> = (props: any) => {
           <HiddenArea>{post.title}</HiddenArea>
         </>
       )}
-      <CreatorWrapper>
-        <UserIconWrapper>
-          <UserIcon></UserIcon>
-        </UserIconWrapper>
-        <CreatorInfoWrapper>
-          {post.description ? (
-            <>
-              <CreatorLabelWrapper>{CreatorLabel(post)}</CreatorLabelWrapper>
-              <PostDescription>{post.description}</PostDescription>
-            </>
-          ) : (
-            <CreatorNameNoDescription>
-              {CreatorLabel(post)}
-            </CreatorNameNoDescription>
-          )}
-        </CreatorInfoWrapper>
-      </CreatorWrapper>
+      <IonItem
+        button
+        routerLink={`post/${post.uuid}`}
+        detail={false}
+        lines="none"
+        fill="outline"
+        type="button"
+      >
+        <CreatorWrapper>
+          <UserIconWrapper>
+            <UserIcon></UserIcon>
+          </UserIconWrapper>
+          <CreatorInfoWrapper>
+            {post.description ? (
+              <>
+                <CreatorLabelWrapper>{CreatorLabel(post)}</CreatorLabelWrapper>
+                <PostDescription>{post.description}</PostDescription>
+              </>
+            ) : (
+              <CreatorNameNoDescription>
+                {CreatorLabel(post)}
+              </CreatorNameNoDescription>
+            )}
+          </CreatorInfoWrapper>
+        </CreatorWrapper>
+      </IonItem>
     </>
   )
 }
@@ -49,26 +60,13 @@ export const CreatorLabel = (post: any) => {
   return (
     <CreatorLabelInner>
       <CreatorName>{post.user.name}</CreatorName>
-      <ActionItems>
-        <ActionItem>
-          <ActionItemImg src="assets/icon/hearts.svg" />
-          <ActionItemCount>100</ActionItemCount>
-        </ActionItem>
-        <ActionItem>
-          <ActionItemImg src="assets/icon/comments.svg" />
-          <ActionItemCount>232</ActionItemCount>
-        </ActionItem>
-        <ActionItem>
-          <ActionItemImg src="assets/icon/share.svg" />
-          <ActionItemCount>10.2k</ActionItemCount>
-        </ActionItem>
-        <ActionItemImg src="assets/icon/option.svg" />
-      </ActionItems>
+      <ActionsLabel></ActionsLabel>
+      <ActionItemImg src="assets/icon/option.svg" />
     </CreatorLabelInner>
   )
 }
 
-export default VideoContentList
+export default PostContentListItem
 
 const VideoPlayerWrapper = styled.div`
   width: calc(100vw - 8px);
@@ -158,22 +156,8 @@ const CreatorName = styled.span`
   font-weight: 700;
   line-height: 13px;
 `
-const ActionItems = styled.div`
-  width: 170px;
-  display: flex;
-  justify-content: space-around;
-`
-
-const ActionItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 3px;
-`
 const ActionItemImg = styled.img`
   width: 18px;
   height: 18px;
   margin-right: 3px;
-`
-const ActionItemCount = styled.span`
-  font-size: 8px;
 `
