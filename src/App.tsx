@@ -150,7 +150,3 @@ const App: React.FC = () => {
 }
 
 export default App
-
-const AppIonTabBar = styled(IonTabBar)`
-  background: #fff;
-`
