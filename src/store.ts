@@ -8,6 +8,7 @@ import todosReducer from './slices/todosSlice'
 import profileReducer from './slices/profileSlice'
 import postReducer from './slices/postSlice'
 import postsReducer from './slices/postsSlice'
+import globalSignupModalReducer from './slices/global/signupModalSlice'
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     profileState: profileReducer,
     postState: postReducer,
     postsState: postsReducer,
+    globalSignupModalState: globalSignupModalReducer,
   },
 })
 

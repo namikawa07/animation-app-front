@@ -53,14 +53,6 @@ export interface SignInSwitchesType {
   switchHandler: (isSwitch: boolean) => void
 }
 
-export interface ProfileStateType {
-  profile: ProfileType
-  loading: boolean
-  error: {
-    status: boolean
-    message: string | null
-  }
-}
 
 export interface ProfileType {
   uuid: string
@@ -90,5 +82,26 @@ export interface UserIconComponentType {
 export interface AccountDescriptionComponentType {
   description: string
 }
+
+// ------------------- state type -------------------
+
+export interface ProfileStateType {
+  profile: ProfileType
+  loading: boolean
+  error: {
+    status: boolean
+    message: string | null
+  }
+}
+
+export interface GlobalSignupModalType {
+  isOpen: boolean
+  loading: boolean
+  error: {
+    status: boolean | null
+    message: string | null
+  }
+}
+// ------------------- state type -------------------
 
 export default TypeScript

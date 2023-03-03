@@ -7,20 +7,15 @@ import {
   IonTabs,
   IonTabBar,
   IonTabButton,
-  IonLabel,
   IonIcon,
   IonPage,
   IonContent,
   IonFab,
   IonFabButton,
-  IonModal,
   IonHeader,
   IonToolbar,
-  IonButtons,
-  IonButton,
   IonTitle,
-  IonItem,
-  IonInput,
+  IonMenu,
 } from '@ionic/react'
 import { personOutline, home, add, notificationsOutline } from 'ionicons/icons'
 import { IonReactRouter } from '@ionic/react-router'
@@ -30,7 +25,6 @@ import AccountDetail from './pages/AccountDetail'
 import Header from '../src/components/Header'
 import Notice from './pages/Notice'
 import SignupModal from '../src/components/SignupModal'
-import AccountUserSetting from './components/account/userSetting'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css'
@@ -64,6 +58,10 @@ const App: React.FC = () => {
     return state.profileState
   })
 
+  const globalSignupModalState: any = useSelector((state: any) => {
+    return state.globalSignupModalState
+  })
+
   const page = useRef(null)
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] =
     useState<boolean>(false)
@@ -72,22 +70,22 @@ const App: React.FC = () => {
   const closeCreatePostModal = () => {
     setIsCreatePostModalOpen(false)
   }
-  const closeSignupModal = () => {
-    setIsSignupOpen(false)
-  }
   useEffect(() => {
     dispatch(fetchMyProfile())
   }, [dispatch])
 
+  useEffect(() => {
+    setIsSignupOpen(globalSignupModalState.isOpen)
+  }, [globalSignupModalState])
+
   return (
     <IonApp>
-      <IonPage ref={page}>
+      <IonPage ref={page} id="main-content">
         <IonReactRouter>
           <Header></Header>
           <SignupModal
             openPage={page}
             isSignupOpen={isSignupOpen}
-            closeSignupModal={closeSignupModal}
           ></SignupModal>
           <IonTabs>
             <IonRouterOutlet>
@@ -131,6 +129,16 @@ const App: React.FC = () => {
           closeModal={closeCreatePostModal}
         ></CreatePostModal>
       </IonPage>
+      <IonMenu side="end" type="push" contentId="main-content">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Menu Content</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding">
+          This is the menu content.
+        </IonContent>
+      </IonMenu>
     </IonApp>
   )
 }

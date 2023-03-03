@@ -1,14 +1,34 @@
 import React, { useState, useEffect } from 'react'
-import { IonHeader, IonToolbar, IonButtons, IonBackButton } from '@ionic/react'
+import {
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonMenuToggle,
+  IonImg,
+} from '@ionic/react'
 import { useLocation } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
 import './Header.css'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { AppDispatch } from '../store'
+import { openSignupModal } from '../../src/slices/global/signupModalSlice'
 
 const Header: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const profileState: any = useSelector((state: any) => {
+    return state.profileState
+  })
+
   const [headerTitle, setHeaderTitle] = useState<string>('')
 
   const location = useLocation<locationType>()
+
+  const clickAccount = () => {
+    if (profileState.profile && profileState.profile.uuid !== '')
+      dispatch(openSignupModal())
+  }
   useEffect(() => {
     let title = ''
     switch (location.pathname) {
@@ -54,9 +74,17 @@ const Header: React.FC = () => {
           <SearchIonButtons slot="end">
             <SearchImg src="assets/icon/search.svg" />
           </SearchIonButtons>
-          <IonButtons slot="end">
-            <img src="assets/icon/account.svg" />
-          </IonButtons>
+          {profileState.profile && profileState.profile.uuid !== '' ? (
+            <IonButtons slot="end">
+              <IonMenuToggle>
+                <IonImg src="assets/icon/account.svg"></IonImg>
+              </IonMenuToggle>
+            </IonButtons>
+          ) : (
+            <IonButtons slot="end" onClick={clickAccount}>
+              <img src="assets/icon/account.svg" />
+            </IonButtons>
+          )}
         </HomeIonToolbar>
       </IonHeader>
     </>
