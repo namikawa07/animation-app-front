@@ -182,7 +182,7 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-step-900: #e6e6e6;
     --ion-color-step-950: #f2f2f2;
 
-    --ion-item-background: #2b2b2b;
+    --ion-item-background: #fff;
 
     --ion-card-background: #1c1c1d;
   }

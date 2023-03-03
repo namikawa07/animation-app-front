@@ -6,6 +6,8 @@ import {
   IonBackButton,
   IonMenuToggle,
   IonImg,
+  IonThumbnail,
+  IonItem,
 } from '@ionic/react'
 import { useLocation } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
@@ -62,10 +64,10 @@ const Header: React.FC = () => {
 
   const AccountImg = () => {
     if (profileState.profile && profileState.profile.thumbnail_url) {
-      if (profileState.profile.thumbnail_url !== '') {
-        return profileState.profile.thumbnail_url
+      if (profileState.profile.thumbnail_url === 'default-thumbnail-url') {
+        return `assets/icon/default-thumbnail.png`
       } else {
-        return 'assets/icon/default-thumbnail.png'
+        return profileState.profile.thumbnail_url
       }
     } else {
       return 'assets/icon/account.svg'
@@ -80,7 +82,16 @@ const Header: React.FC = () => {
           <IonButtons slot="start">
             {location.pathname === '/home' ||
             location.pathname === '/notice' ? (
-              <img src="assets/icon/logo.svg" />
+              <LogoIonItem
+                button
+                routerLink="/home"
+                detail={false}
+                lines="none"
+                fill="outline"
+                type="button"
+              >
+                <img src="assets/icon/logo.svg" />
+              </LogoIonItem>
             ) : (
               <IonBackButton
                 color="medium"
@@ -98,7 +109,9 @@ const Header: React.FC = () => {
           {profileState.profile && profileState.profile.uuid !== '' ? (
             <IonButtons slot="end">
               <IonMenuToggle>
-                <IonImg src={AccountImg()}></IonImg>
+                <AccountThumbnail>
+                  <AccountImage src={AccountImg()}></AccountImage>
+                </AccountThumbnail>
               </IonMenuToggle>
             </IonButtons>
           ) : (
@@ -125,4 +138,17 @@ const SearchIonButtons = styled(IonButtons)`
 const SearchImg = styled.img`
   width: 28px;
   height: 28px;
+`
+
+const AccountThumbnail = styled(IonThumbnail)`
+  width: 32px;
+  height: 32px;
+`
+const AccountImage = styled(IonImg)`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+`
+const LogoIonItem = styled(IonItem)`
+  --padding-start: 0px;
 `
