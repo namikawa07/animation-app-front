@@ -1,58 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonIcon,
-  IonButton,
-  IonButtons,
-  IonBackButton,
-  IonSearchbar,
-  IonContent,
-} from '@ionic/react'
-import { searchOutline } from 'ionicons/icons'
+import { IonHeader, IonToolbar, IonButtons, IonBackButton } from '@ionic/react'
 import { useLocation } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
 import './Header.css'
-import SearchList from './SearchList'
 import styled from 'styled-components'
 
 const Header: React.FC = () => {
-  const [headerTitle, setHeaderTitle] = useState<string>('moon')
-  const [isDisplaySearch, setIsDisplaySearch] = useState<boolean>(false)
-  const [searchText, setSearchText] = useState('')
-  const [isSearchModalOpen, setIsSearchListOpen] = useState<boolean>(false)
+  const [headerTitle, setHeaderTitle] = useState<string>('')
 
-  const closeSearchModal = () => {
-    setIsSearchListOpen(false)
-  }
-  /*
-  const HeaderIonHeader = styled(IonHeader)`
-    position: relative;
-  `
-
-  const HeaderSearchBarIonSearchbar = styled(IonSearchbar)`
-    padding-top: 12px;
-  `
-
-  const HeaderSearchListIonContent = styled(IonContent)`
-    height: calc(100vh / 2);
-  `
-  */
-
-  let BackButton = <></>
   const location = useLocation<locationType>()
-  if (location.pathname !== '/home') {
-    BackButton = (
-      <IonButtons slot="start">
-        <IonBackButton
-          color="medium"
-          text=""
-          defaultHref="/home"
-        ></IonBackButton>
-      </IonButtons>
-    )
-  }
   useEffect(() => {
     let title = ''
     switch (location.pathname) {
@@ -74,59 +30,50 @@ const Header: React.FC = () => {
 
     const path: string = location.pathname
     setHeaderTitle(title)
-    setIsDisplaySearch(false)
   }, [location])
 
   return (
     <>
       <IonHeader translucent>
-        <IonToolbar>
-          {BackButton}
-          <IonButtons slot="end">
-            {isDisplaySearch ? (
-              <></>
+        <HomeIonToolbar>
+          <IonButtons slot="start">
+            {location.pathname === '/home' ||
+            location.pathname === '/notice' ? (
+              <img src="assets/icon/logo.svg" />
             ) : (
-              <IonButton
-                color="dark"
-                onClick={() => {
-                  setIsDisplaySearch(true)
-                }}
-              >
-                <IonIcon slot="icon-only" icon={searchOutline} />
-              </IonButton>
+              <IonBackButton
+                color="medium"
+                text=""
+                defaultHref="/home"
+              ></IonBackButton>
             )}
           </IonButtons>
-          {isDisplaySearch ? (
-            <IonSearchbar
-              showClearButton="always"
-              showCancelButton="always"
-              cancelButtonText="閉じる"
-              debounce={1000}
-              onIonCancel={() => {
-                setIsDisplaySearch(false)
-              }}
-              onIonChange={(e) => setSearchText(e.detail.value!)}
-              onIonFocus={() => {
-                setIsSearchListOpen(true)
-              }}
-              onIonBlur={() => {
-                setIsSearchListOpen(false)
-              }}
-            ></IonSearchbar>
-          ) : (
-            <IonTitle>{headerTitle}</IonTitle>
-          )}
-        </IonToolbar>
-        {isSearchModalOpen ? (
-          <IonContent>
-            <SearchList></SearchList>
-          </IonContent>
-        ) : (
-          <></>
-        )}
+          <IonButtons slot="center">
+            <span>{headerTitle}</span>
+          </IonButtons>
+          <SearchIonButtons slot="end">
+            <SearchImg src="assets/icon/search.svg" />
+          </SearchIonButtons>
+          <IonButtons slot="end">
+            <img src="assets/icon/account.svg" />
+          </IonButtons>
+        </HomeIonToolbar>
       </IonHeader>
     </>
   )
 }
 
 export default Header
+
+const HomeIonToolbar = styled(IonToolbar)`
+  padding: 0px 8px;
+`
+
+const SearchIonButtons = styled(IonButtons)`
+  margin-right: 24px;
+`
+
+const SearchImg = styled.img`
+  width: 28px;
+  height: 28px;
+`
