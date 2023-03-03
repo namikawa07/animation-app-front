@@ -17,18 +17,19 @@ import { openSignupModal } from '../../src/slices/global/signupModalSlice'
 
 const Header: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const profileState: any = useSelector((state: any) => {
-    return state.profileState
-  })
-
-  const [headerTitle, setHeaderTitle] = useState<string>('')
-
   const location = useLocation<locationType>()
 
-  const clickAccount = () => {
-    if (profileState.profile && profileState.profile.uuid !== '')
-      dispatch(openSignupModal())
-  }
+  // ------------------ global state ------------------
+  const profileState = useSelector((state: any) => {
+    return state.profileState
+  })
+  // ------------------ global state ------------------
+
+  // ------------------ local state ------------------
+  const [headerTitle, setHeaderTitle] = useState<string>('')
+  // ------------------ local state ------------------
+
+  // ------------------ useEffect ------------------
   useEffect(() => {
     let title = ''
     switch (location.pathname) {
@@ -51,6 +52,26 @@ const Header: React.FC = () => {
     const path: string = location.pathname
     setHeaderTitle(title)
   }, [location])
+  // ------------------ useEffect ------------------
+
+  // ------------------ methods ------------------
+  const clickAccount = () => {
+    if (!profileState.profile || profileState.profile.uuid === '')
+      dispatch(openSignupModal())
+  }
+
+  const AccountImg = () => {
+    if (profileState.profile && profileState.profile.thumbnail_url) {
+      if (profileState.profile.thumbnail_url !== '') {
+        return profileState.profile.thumbnail_url
+      } else {
+        return 'assets/icon/default-thumbnail.png'
+      }
+    } else {
+      return 'assets/icon/account.svg'
+    }
+  }
+  // ------------------ methods ------------------
 
   return (
     <>
@@ -77,12 +98,12 @@ const Header: React.FC = () => {
           {profileState.profile && profileState.profile.uuid !== '' ? (
             <IonButtons slot="end">
               <IonMenuToggle>
-                <IonImg src="assets/icon/account.svg"></IonImg>
+                <IonImg src={AccountImg()}></IonImg>
               </IonMenuToggle>
             </IonButtons>
           ) : (
             <IonButtons slot="end" onClick={clickAccount}>
-              <img src="assets/icon/account.svg" />
+              <img src={AccountImg()} />
             </IonButtons>
           )}
         </HomeIonToolbar>
