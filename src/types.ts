@@ -87,7 +87,7 @@ export interface AccountDescriptionComponentType {
 
 export interface ProfileStateType {
   profile: ProfileType
-  loading: boolean
+  loaded: boolean
   error: {
     status: boolean
     message: string | null

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import { useLocation, Route, Redirect } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import {
   IonApp,
   IonRouterOutlet,
@@ -7,17 +7,14 @@ import {
   IonTabs,
   IonTabBar,
   IonTabButton,
-  IonIcon,
   IonPage,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonHeader,
   IonToolbar,
   IonTitle,
   IonMenu,
+  IonImg,
 } from '@ionic/react'
-import { personOutline, home, add, notificationsOutline } from 'ionicons/icons'
 import { IonReactRouter } from '@ionic/react-router'
 import Home from './pages/Home'
 import Account from './pages/Account'
@@ -49,6 +46,9 @@ import CreatePostModal from './components/CreatePostModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMyProfile } from 'slices/profileSlice'
 import { AppDispatch } from './store'
+import styled from 'styled-components'
+
+import { openSignupModal } from '../src/slices/global/signupModalSlice'
 
 setupIonicReact()
 
@@ -62,6 +62,14 @@ const App: React.FC = () => {
     return state.globalSignupModalState
   })
 
+  useEffect(() => {
+    dispatch(fetchMyProfile())
+  }, [dispatch])
+
+  useEffect(() => {
+    setIsSignupOpen(globalSignupModalState.isOpen)
+  }, [globalSignupModalState])
+
   const page = useRef(null)
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] =
     useState<boolean>(false)
@@ -70,13 +78,14 @@ const App: React.FC = () => {
   const closeCreatePostModal = () => {
     setIsCreatePostModalOpen(false)
   }
-  useEffect(() => {
-    dispatch(fetchMyProfile())
-  }, [dispatch])
 
-  useEffect(() => {
-    setIsSignupOpen(globalSignupModalState.isOpen)
-  }, [globalSignupModalState])
+  const clickCreatePostButton = () => {
+    if (profileState.profile && profileState.profile.uuid !== '') {
+      setIsCreatePostModalOpen(true)
+    } else {
+      dispatch(openSignupModal())
+    }
+  }
 
   return (
     <IonApp>
@@ -99,31 +108,28 @@ const App: React.FC = () => {
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
               <IonTabButton tab="home" href="/home">
-                <IonIcon icon={home} aria-hidden="true" />
+                <IonImg src="assets/icon/home.svg"></IonImg>
               </IonTabButton>
-              <IonTabButton tab="notice" href="/notice">
-                <IonIcon icon={notificationsOutline} aria-hidden="true" />
+              <IonTabButton tab="" onClick={() => clickCreatePostButton()}>
+                <IonImg src="assets/icon/create.svg"></IonImg>
               </IonTabButton>
-              {profileState.profile && profileState.profile.uuid !== '' ? (
-                <IonTabButton tab="account" href="/account">
-                  <IonIcon icon={personOutline} aria-hidden="true" />
+              {profileState.profile.loaded ? (
+                <IonTabButton tab="notice" href="/notice">
+                  <IonImg src="assets/icon/bell.svg"></IonImg>
                 </IonTabButton>
               ) : (
                 <IonTabButton
-                  tab="account"
-                  onClick={() => setIsSignupOpen(true)}
+                  tab="notice"
+                  onClick={() => {
+                    dispatch(openSignupModal())
+                  }}
                 >
-                  <IonIcon icon={personOutline} aria-hidden="true" />
+                  <IonImg src="assets/icon/bell.svg"></IonImg>
                 </IonTabButton>
               )}
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={() => setIsCreatePostModalOpen(true)}>
-            <IonIcon icon={add} />
-          </IonFabButton>
-        </IonFab>
         <CreatePostModal
           isOpen={isCreatePostModalOpen}
           closeModal={closeCreatePostModal}
