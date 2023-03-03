@@ -45,7 +45,7 @@ const initialState: ProfileStateType = {
     thumbnail_url: '',
     email: '',
   },
-  loading: false,
+  loaded: false,
   error: {
     status: false,
     message: null,
@@ -60,7 +60,7 @@ const profileSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(signUpUser.fulfilled, (state, action) => {
-      state.loading = true
+      state.loaded = true
       state.profile = action.payload.myProfile
 
       console.log(
@@ -70,7 +70,7 @@ const profileSlice = createSlice({
     })
     builder.addCase(signUpUser.rejected, (state) => {
       // apiの通信がうまくいかなかった時のerror
-      state.loading = true
+      state.loaded = true
       state.error.status = true
 
       console.log(
@@ -79,7 +79,7 @@ const profileSlice = createSlice({
     })
 
     builder.addCase(SignInUser.fulfilled, (state, action) => {
-      state.loading = true
+      state.loaded = true
       state.profile = action.payload.myProfile
 
       console.log(
@@ -89,7 +89,7 @@ const profileSlice = createSlice({
     })
     builder.addCase(SignInUser.rejected, (state) => {
       // apiの通信がうまくいかなかった時のerror
-      state.loading = true
+      state.loaded = true
       state.error.status = true
 
       console.log(
@@ -98,14 +98,14 @@ const profileSlice = createSlice({
     })
 
     builder.addCase(fetchMyProfile.fulfilled, (state, action) => {
-      state.loading = true
+      state.loaded = true
       state.profile = action.payload.myProfile
 
       console.log(`========================= Success fetchMyProfile`)
     })
     builder.addCase(fetchMyProfile.rejected, (state) => {
       // apiの通信がうまくいかなかった時のerror
-      state.loading = true
+      state.loaded = true
       state.error.status = true
 
       console.log(`========================= Error fetchMyProfile`)

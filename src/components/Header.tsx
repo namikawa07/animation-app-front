@@ -82,16 +82,9 @@ const Header: React.FC = () => {
           <IonButtons slot="start">
             {location.pathname === '/home' ||
             location.pathname === '/notice' ? (
-              <LogoIonItem
-                button
-                routerLink="/home"
-                detail={false}
-                lines="none"
-                fill="outline"
-                type="button"
-              >
+              <a href="/home">
                 <img src="assets/icon/logo.svg" />
-              </LogoIonItem>
+              </a>
             ) : (
               <IonBackButton
                 color="medium"

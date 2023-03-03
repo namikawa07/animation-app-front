@@ -48,6 +48,8 @@ import { fetchMyProfile } from 'slices/profileSlice'
 import { AppDispatch } from './store'
 import styled from 'styled-components'
 
+import { openSignupModal } from '../src/slices/global/signupModalSlice'
+
 setupIonicReact()
 
 const App: React.FC = () => {
@@ -60,6 +62,14 @@ const App: React.FC = () => {
     return state.globalSignupModalState
   })
 
+  useEffect(() => {
+    dispatch(fetchMyProfile())
+  }, [dispatch])
+
+  useEffect(() => {
+    setIsSignupOpen(globalSignupModalState.isOpen)
+  }, [globalSignupModalState])
+
   const page = useRef(null)
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] =
     useState<boolean>(false)
@@ -68,13 +78,14 @@ const App: React.FC = () => {
   const closeCreatePostModal = () => {
     setIsCreatePostModalOpen(false)
   }
-  useEffect(() => {
-    dispatch(fetchMyProfile())
-  }, [dispatch])
 
-  useEffect(() => {
-    setIsSignupOpen(globalSignupModalState.isOpen)
-  }, [globalSignupModalState])
+  const clickCreatePostButton = () => {
+    if (profileState.profile && profileState.profile.uuid !== '') {
+      setIsCreatePostModalOpen(true)
+    } else {
+      dispatch(openSignupModal())
+    }
+  }
 
   return (
     <IonApp>
@@ -99,15 +110,23 @@ const App: React.FC = () => {
               <IonTabButton tab="home" href="/home">
                 <IonImg src="assets/icon/home.svg"></IonImg>
               </IonTabButton>
-              <IonTabButton
-                tab=""
-                onClick={() => setIsCreatePostModalOpen(true)}
-              >
+              <IonTabButton tab="" onClick={() => clickCreatePostButton()}>
                 <IonImg src="assets/icon/create.svg"></IonImg>
               </IonTabButton>
-              <IonTabButton tab="notice" href="/notice">
-                <IonImg src="assets/icon/bell.svg"></IonImg>
-              </IonTabButton>
+              {profileState.profile.loaded ? (
+                <IonTabButton tab="notice" href="/notice">
+                  <IonImg src="assets/icon/bell.svg"></IonImg>
+                </IonTabButton>
+              ) : (
+                <IonTabButton
+                  tab="notice"
+                  onClick={() => {
+                    dispatch(openSignupModal())
+                  }}
+                >
+                  <IonImg src="assets/icon/bell.svg"></IonImg>
+                </IonTabButton>
+              )}
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>
