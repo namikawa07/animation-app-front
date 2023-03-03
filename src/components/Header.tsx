@@ -2,57 +2,36 @@ import React, { useState, useEffect } from 'react'
 import {
   IonHeader,
   IonToolbar,
-  IonTitle,
-  IonIcon,
-  IonButton,
   IonButtons,
   IonBackButton,
-  IonSearchbar,
-  IonContent,
+  IonMenuToggle,
+  IonImg,
+  IonThumbnail,
+  IonItem,
 } from '@ionic/react'
-import { searchOutline } from 'ionicons/icons'
 import { useLocation } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
 import './Header.css'
-import SearchList from './SearchList'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { AppDispatch } from '../store'
+import { openSignupModal } from '../../src/slices/global/signupModalSlice'
 
 const Header: React.FC = () => {
-  const [headerTitle, setHeaderTitle] = useState<string>('moon')
-  const [isDisplaySearch, setIsDisplaySearch] = useState<boolean>(false)
-  const [searchText, setSearchText] = useState('')
-  const [isSearchModalOpen, setIsSearchListOpen] = useState<boolean>(false)
-
-  const closeSearchModal = () => {
-    setIsSearchListOpen(false)
-  }
-  /*
-  const HeaderIonHeader = styled(IonHeader)`
-    position: relative;
-  `
-
-  const HeaderSearchBarIonSearchbar = styled(IonSearchbar)`
-    padding-top: 12px;
-  `
-
-  const HeaderSearchListIonContent = styled(IonContent)`
-    height: calc(100vh / 2);
-  `
-  */
-
-  let BackButton = <></>
+  const dispatch = useDispatch<AppDispatch>()
   const location = useLocation<locationType>()
-  if (location.pathname !== '/home') {
-    BackButton = (
-      <IonButtons slot="start">
-        <IonBackButton
-          color="medium"
-          text=""
-          defaultHref="/home"
-        ></IonBackButton>
-      </IonButtons>
-    )
-  }
+
+  // ------------------ global state ------------------
+  const profileState = useSelector((state: any) => {
+    return state.profileState
+  })
+  // ------------------ global state ------------------
+
+  // ------------------ local state ------------------
+  const [headerTitle, setHeaderTitle] = useState<string>('')
+  // ------------------ local state ------------------
+
+  // ------------------ useEffect ------------------
   useEffect(() => {
     let title = ''
     switch (location.pathname) {
@@ -74,59 +53,102 @@ const Header: React.FC = () => {
 
     const path: string = location.pathname
     setHeaderTitle(title)
-    setIsDisplaySearch(false)
   }, [location])
+  // ------------------ useEffect ------------------
+
+  // ------------------ methods ------------------
+  const clickAccount = () => {
+    if (!profileState.profile || profileState.profile.uuid === '')
+      dispatch(openSignupModal())
+  }
+
+  const AccountImg = () => {
+    if (profileState.profile && profileState.profile.thumbnail_url) {
+      if (profileState.profile.thumbnail_url === 'default-thumbnail-url') {
+        return `assets/icon/default-thumbnail.png`
+      } else {
+        return profileState.profile.thumbnail_url
+      }
+    } else {
+      return 'assets/icon/account.svg'
+    }
+  }
+  // ------------------ methods ------------------
 
   return (
     <>
       <IonHeader translucent>
-        <IonToolbar>
-          {BackButton}
-          <IonButtons slot="end">
-            {isDisplaySearch ? (
-              <></>
-            ) : (
-              <IonButton
-                color="dark"
-                onClick={() => {
-                  setIsDisplaySearch(true)
-                }}
+        <HomeIonToolbar>
+          <IonButtons slot="start">
+            {location.pathname === '/home' ||
+            location.pathname === '/notice' ? (
+              <LogoIonItem
+                button
+                routerLink="/home"
+                detail={false}
+                lines="none"
+                fill="outline"
+                type="button"
               >
-                <IonIcon slot="icon-only" icon={searchOutline} />
-              </IonButton>
+                <img src="assets/icon/logo.svg" />
+              </LogoIonItem>
+            ) : (
+              <IonBackButton
+                color="medium"
+                text=""
+                defaultHref="/home"
+              ></IonBackButton>
             )}
           </IonButtons>
-          {isDisplaySearch ? (
-            <IonSearchbar
-              showClearButton="always"
-              showCancelButton="always"
-              cancelButtonText="閉じる"
-              debounce={1000}
-              onIonCancel={() => {
-                setIsDisplaySearch(false)
-              }}
-              onIonChange={(e) => setSearchText(e.detail.value!)}
-              onIonFocus={() => {
-                setIsSearchListOpen(true)
-              }}
-              onIonBlur={() => {
-                setIsSearchListOpen(false)
-              }}
-            ></IonSearchbar>
+          <IonButtons slot="center">
+            <span>{headerTitle}</span>
+          </IonButtons>
+          <SearchIonButtons slot="end">
+            <SearchImg src="assets/icon/search.svg" />
+          </SearchIonButtons>
+          {profileState.profile && profileState.profile.uuid !== '' ? (
+            <IonButtons slot="end">
+              <IonMenuToggle>
+                <AccountThumbnail>
+                  <AccountImage src={AccountImg()}></AccountImage>
+                </AccountThumbnail>
+              </IonMenuToggle>
+            </IonButtons>
           ) : (
-            <IonTitle>{headerTitle}</IonTitle>
+            <IonButtons slot="end" onClick={clickAccount}>
+              <img src={AccountImg()} />
+            </IonButtons>
           )}
-        </IonToolbar>
-        {isSearchModalOpen ? (
-          <IonContent>
-            <SearchList></SearchList>
-          </IonContent>
-        ) : (
-          <></>
-        )}
+        </HomeIonToolbar>
       </IonHeader>
     </>
   )
 }
 
 export default Header
+
+const HomeIonToolbar = styled(IonToolbar)`
+  padding: 0px 8px;
+`
+
+const SearchIonButtons = styled(IonButtons)`
+  margin-right: 24px;
+`
+
+const SearchImg = styled.img`
+  width: 28px;
+  height: 28px;
+`
+
+const AccountThumbnail = styled(IonThumbnail)`
+  width: 32px;
+  height: 32px;
+`
+const AccountImage = styled(IonImg)`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+`
+const LogoIonItem = styled(IonItem)`
+  --padding-start: 0px;
+`

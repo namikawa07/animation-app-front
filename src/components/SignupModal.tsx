@@ -29,20 +29,17 @@ import {
 } from 'firebase/auth'
 
 import { signUpUser, SignInUser } from 'slices/profileSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'store'
+
+import { closeSignupModal } from '../../src/slices/global/signupModalSlice'
 
 interface SignupModalType {
   openPage: { current: any }
   isSignupOpen: boolean
-  closeSignupModal: any
 }
 
-const SignupModal: React.FC<SignupModalType> = ({
-  openPage,
-  isSignupOpen,
-  closeSignupModal,
-}) => {
+const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   // ------------------- init -------------------
   const dispatch = useDispatch<AppDispatch>()
   // ------------------- init -------------------
@@ -84,7 +81,7 @@ const SignupModal: React.FC<SignupModalType> = ({
 
   function dismiss() {
     modal.current?.dismiss()
-    closeSignupModal()
+    dispatch(closeSignupModal())
   }
   // ------------------- function main -------------------
   // ------------------- function validation -------------------
@@ -137,7 +134,7 @@ const SignupModal: React.FC<SignupModalType> = ({
         }
 
         dispatch(signUpUser(firebaseAuthParams))
-        closeSignupModal()
+        dispatch(closeSignupModal())
       })
       .catch((error) => {
         // firebaseへの外部接続が失敗した場合
@@ -155,7 +152,7 @@ const SignupModal: React.FC<SignupModalType> = ({
       .then(() => {
         const firebaseAuthParams = {}
         dispatch(SignInUser(firebaseAuthParams))
-        closeSignupModal()
+        dispatch(closeSignupModal())
       })
       .catch((error) => {
         // firebaseへの外部接続が失敗した場合
