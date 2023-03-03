@@ -16,7 +16,6 @@ type TypeScript = {
   }
 }
 
-// ここから使う
 export type VisibilityFilterTypes =
   (typeof VISIBILITY_FILTERS)[keyof typeof VISIBILITY_FILTERS]
 
@@ -26,31 +25,12 @@ export interface RootState {
 }
 
 export interface TodoState {
-  todoItems: Array<TodoItem>
+  todoItems: any
   loading: boolean
   error: {
     status: boolean
     message: string | null
   }
-}
-
-export interface TodoItem {
-  id: number
-  content: string
-  completed: boolean
-}
-
-// ----------------------------ちゃんと使ってるのかここから
-
-export interface ButtonListItemType {
-  serviceTitle: string
-  dialogType: string
-  LoginServiceHandler: (serviceType: string) => void
-}
-
-export interface SignInSwitchesType {
-  checked: boolean
-  switchHandler: (isSwitch: boolean) => void
 }
 
 export interface ProfileStateType {
@@ -77,18 +57,54 @@ export interface FirebaseAuthPasswordWithEmailType {
   tenant_id: string | null
 }
 
-export interface AccountBackgroundComponentType {
-  thumbnailUrl: string
+// ------------------- PostData ------------------
+export interface PostDataType {
+  id: number
+  uuid: string | null
+  title: string | null
+  contents_type: string | null
+  description: string | null
+  status: string | null
+  user: UserDataType | null
+  video: VideoDataType | null
 }
 
-export interface UserIconComponentType {
-  clickIconHandler: () => void | null
-  size: number
-  thumbnailUrl: string
+export interface PostInitialStateType {
+  post: PostDataType
+  loading: boolean
+  error: ErrorType
 }
 
-export interface AccountDescriptionComponentType {
-  description: string
+// ------------------- PostData ------------------
+
+// ------------------- UserData ------------------
+
+export interface UserDataType {
+  id: number
 }
+// ------------------- UserData ------------------
+
+// ------------------- VideoData ------------------
+export interface VideoDataType {
+  id: number
+  post: PostDataType
+  status: string
+  url: string
+  uuid: string
+}
+
+// ------------------- VideoData ------------------
+
+// ------------------ error type --------------------
+export interface ErrorType {
+  status: any | null
+  message: any | null
+}
+
+// ------------------- useParams ------------------
+export interface UseParamsType {
+  uuid: string 
+}
+// ------------------- useParams ------------------
 
 export default TypeScript

@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import postApiService from '../lib/api/postApi'
 import { fetchAllPosts } from './postsSlice'
+import { PostInitialStateType } from '../../src/types'
 
 // ------------------- createAsyncThunk -------------------
 export const createPost = createAsyncThunk<{ post: any }, any>(
@@ -12,17 +13,27 @@ export const createPost = createAsyncThunk<{ post: any }, any>(
   }
 )
 
+export const fetch = createAsyncThunk<{ post: any }, any>(
+  'post/fetch',
+  async (postUuid: string) => {
+    const response = await postApiService.fetch(postUuid)
+    return { post: response.data }
+  }
+)
+
 // ------------------- createAsyncThunk -------------------
 
 // --------------------- initialState ---------------------
-const initialState: any = {
+const initialState: PostInitialStateType = {
   post: {
-    type: '',
-    url: '',
-    title: '',
-    description: '',
+    id: 0,
+    uuid: null,
+    title: null,
+    contents_type: null,
+    description: null,
     status: null,
-    user: {},
+    user: null,
+    video: null,
   },
   loading: false,
   error: {
@@ -56,6 +67,26 @@ const postSlice = createSlice({
       console.log(`========================= Error create post`)
     })
     builder.addCase(createPost.pending, (state) => {
+      state.loading = false
+      state.error.status = null
+      state.error.message = null
+    })
+
+    builder.addCase(fetch.fulfilled, (state, action) => {
+      console.log(action.payload.post)
+      state.loading = true
+      state.error.status = false
+      state.post = action.payload.post
+
+    })
+    builder.addCase(fetch.rejected, (state) => {
+      // apiの通信がうまくいかなかった時のerror
+      state.loading = true
+      state.error.status = true
+
+      console.log(`========================= Error create post`)
+    })
+    builder.addCase(fetch.pending, (state) => {
       state.loading = false
       state.error.status = null
       state.error.message = null

@@ -9,6 +9,13 @@ class postApiService {
     })
     return response
   }
+  static async fetch(postUuid: string) {
+    const response = await client.get(`posts/${postUuid}`).catch((error) => {
+      toast.error(error.response.data.error_message)
+      throw new Error(error.response.data)
+    })
+    return response
+  }
   static async create(post: any) {
     const response = await client.post(`posts`, post).catch((error) => {
       toast.error(error.response.data.error_message)
