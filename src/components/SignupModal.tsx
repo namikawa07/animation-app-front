@@ -24,6 +24,7 @@ import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import {
   auth,
+  googleProvider,
   createWithEmailAndPasswordError,
   signInWithEmailAndPasswordError,
 } from '../../src/firebase'
@@ -31,6 +32,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  signInWithPopup,
 } from 'firebase/auth'
 
 import { signUpUser, SignInUser } from 'slices/profileSlice'
@@ -248,6 +250,28 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
       })
       .catch(() => {
         toast.error('記入したメールアドレスが存在しません')
+      })
+  }
+
+  const firebaseAuthGoogle = () => {
+    signInWithPopup(auth, googleProvider)
+      .then(async (userCredential: any) => {
+        const idToken = await userCredential.user?.getIdToken()
+
+        const firebaseAuthParams = {
+          refresh_token: null,
+          access_token: userCredential.user.accessToken,
+          id_token: idToken,
+          tenant_id: userCredential.user.tenantId,
+          name: userCredential.user.displayName,
+        }
+
+        dispatch(SignInUser(firebaseAuthParams))
+        dispatch(closeSignupModal())
+        window.location.reload()
+      })
+      .catch(() => {
+        toast.error('ログインできませんでした。別の方法でお試しください')
       })
   }
   // ------------------- function firebase authentication -------------------
@@ -507,7 +531,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
               <SignupGoogleIonButton
                 expand="block"
                 onClick={() => {
-                  console.log('goole login')
+                  firebaseAuthGoogle()
                 }}
               >
                 <GoogleIonImg src="assets/icon/google.svg"></GoogleIonImg>
@@ -602,6 +626,11 @@ const SignupGoogleIonButton = styled(IonButton)`
   letter-spacing: 0.03em;
   --border-radius: 21px;
   --color: #000;
+  --background-activated: #4d7d75;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 23px;
+  letter-spacing: 0.02em;
 `
 
 const SignupIonButton = styled(IonButton)`
