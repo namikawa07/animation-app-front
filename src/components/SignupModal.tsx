@@ -15,8 +15,13 @@ import {
   IonInput,
   IonNote,
   IonText,
+  IonSlides,
+  IonSlide,
+  IonThumbnail,
+  IonImg,
 } from '@ionic/react'
 import { toast } from 'react-toastify'
+import styled from 'styled-components'
 import {
   auth,
   createWithEmailAndPasswordError,
@@ -34,6 +39,8 @@ import { AppDispatch } from 'store'
 
 import { closeSignupModal } from '../../src/slices/global/signupModalSlice'
 
+import '../styles/SignupModal.css'
+
 interface SignupModalType {
   openPage: { current: any }
   isSignupOpen: boolean
@@ -45,6 +52,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   // ------------------- init -------------------
   // ------------------- data -------------------
   const modal = useRef<HTMLIonModalElement>(null)
+  const mySlides = useRef<HTMLIonSlidesElement>(null)
   const [presentingElement, setPresentingElement] =
     useState<HTMLElement | null>(null)
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null)
@@ -57,6 +65,12 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
   const [currentTab, setCurrentTab] = useState<string>('signup')
+  const [currentSlide, setCurrentSlide] = useState<number>(0)
+
+  const slideOpts = {
+    initialSlide: currentSlide,
+    speed: 400,
+  }
 
   // ------------------- data -------------------
   // ------------------- file cycle  -------------------
@@ -82,6 +96,31 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   function dismiss() {
     modal.current?.dismiss()
     dispatch(closeSignupModal())
+  }
+
+  const onChangeTab = async (target: string) => {
+    setCurrentTab(target)
+    const swiper = await mySlides.current?.getSwiper()
+    let index = 0
+    if (target === 'signup') {
+      index = 0
+    } else if (target === 'signin') {
+      index = 1
+    } else if (target === 'reset-password') {
+      index = 2
+    }
+    swiper?.slideTo(index)
+    setCurrentSlide(index)
+  }
+
+  const onSlideChange = async (ev: any) => {
+    let index = 0
+    await ev.target.getActiveIndex().then((value: number) => (index = value))
+
+    setCurrentSlide(index)
+    if (index === 0) setCurrentTab('signup')
+    if (index === 1) setCurrentTab('signin')
+    if (index === 2) setCurrentTab('reset-password')
   }
   // ------------------- function main -------------------
   // ------------------- function validation -------------------
@@ -186,7 +225,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   // ------------------- components -------------------
   // ------------------- mini component -------------------
   const userNameInputArea = (
-    <IonItem fill="solid">
+    <InputIonItem fill="solid">
       <IonLabel position="stacked">ユーザー名</IonLabel>
       <IonInput
         type="text"
@@ -195,11 +234,11 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
           inputUserName(event)
         }}
       ></IonInput>
-    </IonItem>
+    </InputIonItem>
   )
 
   const EmailInputArea = (
-    <IonItem
+    <InputIonItem
       fill="solid"
       className={`${isValidEmail && 'ion-valid'} ${
         isValidEmail === false && 'ion-invalid'
@@ -213,11 +252,11 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         onIonInput={(event) => validateEmail(event)}
       ></IonInput>
       <IonNote slot="error">メールアドレスの形式で入力してください</IonNote>
-    </IonItem>
+    </InputIonItem>
   )
 
   const passwordInputArea = (
-    <IonItem
+    <InputIonItem
       fill="solid"
       className={`${isValidPassword && 'ion-valid'} ${
         isValidPassword === false && 'ion-invalid'
@@ -230,11 +269,11 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         onIonInput={(event) => validatePassword(event)}
       ></IonInput>
       <IonNote slot="error">パスワードは6文字以上にしてください</IonNote>
-    </IonItem>
+    </InputIonItem>
   )
 
   const confirmPasswordInputArea = (
-    <IonItem
+    <InputIonItem
       fill="solid"
       className={`${isValidConfirmPassword && 'ion-valid'} ${
         isValidConfirmPassword === false && 'ion-invalid'
@@ -247,46 +286,43 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         onIonInput={(event) => validateConfirmPassword(event)}
       ></IonInput>
       <IonNote slot="error">パスワードと一致していません</IonNote>
-    </IonItem>
+    </InputIonItem>
   )
 
   const SignupButton = (
-    <IonButton
+    <SignupIonButton
       expand="block"
-      color="medium"
       disabled={!userName || !email || !password || !confirmPassword}
       onClick={() => {
         firebaseAuthSignup()
       }}
     >
       {TabName()}
-    </IonButton>
+    </SignupIonButton>
   )
 
   const SigninButton = (
-    <IonButton
+    <SignupIonButton
       expand="block"
-      color="medium"
       disabled={!email || !password}
       onClick={() => {
         firebaseAuthSignin()
       }}
     >
       {TabName()}
-    </IonButton>
+    </SignupIonButton>
   )
 
   const resetPasswordButton = (
-    <IonButton
+    <SignupIonButton
       expand="block"
-      color="medium"
       disabled={!email}
       onClick={() => {
         firebaseAuthResetpassword()
       }}
     >
       {TabName()}
-    </IonButton>
+    </SignupIonButton>
   )
 
   const AuthFormatUnit = () => {
@@ -311,6 +347,30 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     if (currentTab === 'reset-password') return <>{EmailInputArea}</>
   }
 
+  const signupInputArea = () => {
+    return (
+      <>
+        {userNameInputArea}
+        {EmailInputArea}
+        {passwordInputArea}
+        {confirmPasswordInputArea}
+      </>
+    )
+  }
+
+  const signinInputArea = () => {
+    return (
+      <>
+        {EmailInputArea}
+        {passwordInputArea}
+      </>
+    )
+  }
+
+  const resetPasswordInputArea = () => {
+    return <>{EmailInputArea}</>
+  }
+
   const authButtonUnit = () => {
     if (currentTab === 'signup') return SignupButton
     if (currentTab === 'signin') return SigninButton
@@ -330,7 +390,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     >
       <IonHeader>
         <IonToolbar>
-          <IonTitle>{TabName()}</IonTitle>
+          <IonTitle color="light">{TabName()}</IonTitle>
           {currentTab === 'reset-password' ? (
             <IonButtons slot="start">
               <IonButton color="dark" onClick={() => setCurrentTab('signup')}>
@@ -341,46 +401,79 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
             <></>
           )}
           <IonButtons slot="end">
-            <IonButton color="dark" onClick={() => dismiss()}>
+            <IonButton color="medium" onClick={() => dismiss()}>
               閉じる
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
-        {currentTab === 'reset-password' ? (
-          <></>
-        ) : (
-          <IonSegment
-            color="secondary"
-            value={currentTab}
-            onIonChange={(e) => {
-              setCurrentTab(e.detail.value!)
-            }}
+      <BackgroundIonContent>
+        <BackgroundInnerIonContent>
+          <LogoIonItem>
+            <LogoIonThumbnail>
+              <LogoImg src="assets/icon/logo.svg"></LogoImg>
+            </LogoIonThumbnail>
+          </LogoIonItem>
+          <SignupToggleButtonIonItem>
+            <SignupIonSegment
+              color="secondary"
+              value={currentTab}
+              onIonChange={(e) => {
+                onChangeTab(e.detail.value!)
+              }}
+            >
+              {currentTab === 'reset-password' ? (
+                <IonSegmentButton value={'reset-password'}>
+                  <IonLabel>パスワードリセット</IonLabel>
+                </IonSegmentButton>
+              ) : (
+                <IonSegmentButton value="signup">
+                  <IonLabel>新規登録</IonLabel>
+                </IonSegmentButton>
+              )}
+              <IonSegmentButton value={'signin'}>
+                <IonLabel>ログイン</IonLabel>
+              </IonSegmentButton>
+            </SignupIonSegment>
+          </SignupToggleButtonIonItem>
+          <InputAreaIonSlides
+            ref={mySlides}
+            options={slideOpts}
+            onIonSlideDidChange={(e) => onSlideChange(e)}
           >
-            <IonSegmentButton value="signup">
-              <IonLabel>新規登録</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="signin">
-              <IonLabel>ログイン</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
-        )}
-
-        <IonList>{AuthFormatUnit()}</IonList>
-        {currentTab === 'signin' ? (
-          <IonText
-            onClick={() => {
-              setCurrentTab('reset-password')
-            }}
-          >
-            パスワードをお忘れの方はこちら
-          </IonText>
-        ) : (
-          <></>
-        )}
-        {authButtonUnit()}
-      </IonContent>
+            <InputAreaIonSlide>{signupInputArea()}</InputAreaIonSlide>
+            <InputAreaIonSlide>
+              {signinInputArea()}
+              <IonItem>
+                <PasswordResetIonText
+                  onClick={() => {
+                    setCurrentTab('reset-password')
+                  }}
+                >
+                  パスワードをお忘れの方はこちら
+                </PasswordResetIonText>
+              </IonItem>
+            </InputAreaIonSlide>
+            <InputAreaIonSlide>{resetPasswordInputArea()}</InputAreaIonSlide>
+          </InputAreaIonSlides>
+          {authButtonUnit()}
+          {currentTab === 'reset-password' ? (
+            <></>
+          ) : (
+            <>
+              <SignupGoogleIonButton
+                expand="block"
+                onClick={() => {
+                  console.log('goole login')
+                }}
+              >
+                <GoogleIonImg src="assets/icon/google.svg"></GoogleIonImg>
+                Googleで{TabName()}
+              </SignupGoogleIonButton>
+            </>
+          )}
+        </BackgroundInnerIonContent>
+      </BackgroundIonContent>
     </IonModal>
   )
   // ------------------- main component -------------------
@@ -390,3 +483,106 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
 export default SignupModal
 
 // ------------------- styled component -------------------
+
+const InputIonItem = styled(IonItem)`
+  --background: none;
+  border-bottom: 2px solid #b7e7ca;
+  margin: 0px 24px 12px 24px;
+  width: 90%;
+`
+
+const BackgroundIonContent = styled(IonContent)`
+  --background: url('/assets/icon/signup-background-test.png') no-repeat 100%
+    100%;
+`
+
+const SlideItemIonItem = styled(IonItem)`
+  --background: none;
+  height: 100%;
+  --padding-start: 0px;
+  --inner-padding-end: 0px;
+`
+const LogoIonItem = styled(IonItem)`
+  height: 90px;
+  --background: none;
+`
+
+const BackgroundInnerIonContent = styled(IonContent)`
+  --background: rgba(75, 75, 75, 0.84);
+  --overflow: none;
+`
+const LogoIonThumbnail = styled(IonThumbnail)`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+`
+
+const LogoImg = styled.img`
+  width: 125px;
+  margin: 0 auto;
+  object-fit: contain;
+`
+const SignupIonSegment = styled(IonSegment)`
+  background: #a7a7a7;
+  height: 46px;
+  border-radius: 24px;
+  padding: 5px;
+  width: 290px;
+  border: 2px solid #b7e7ca;
+  margin: 0 auto 8px auto;
+`
+
+const SignupToggleButtonIonItem = styled(IonItem)`
+  --background: none;
+  --padding-start: 0px;
+`
+
+const InputAreaIonSlides = styled(IonSlides)`
+  height: 350px;
+`
+
+const InputAreaIonSlide = styled(IonSlide)`
+  flex-flow: column;
+  justify-content: flex-start;
+`
+
+const SignupIonButton = styled(IonButton)`
+  margin: 0px 24px;
+  opacity: 1;
+  --background: #73bfb1;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0.03em;
+  --border-radius: 21px;
+`
+
+const SignupGoogleIonButton = styled(IonButton)`
+  margin: 18px 24px 0px 24px;
+  opacity: 1;
+  --background: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0.03em;
+  --border-radius: 21px;
+  --color: #000;
+  margin-bottom: 24px;
+`
+
+const PasswordResetIonText = styled(IonText)`
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 15px;
+  letter-spacing: 0.03em;
+  text-align: center;
+  margin: 32px auto 0px auto;
+`
+
+const GoogleIonImg = styled(IonImg)`
+  width: 20px;
+  height: 20px;
+  margin-right: 18px;
+`

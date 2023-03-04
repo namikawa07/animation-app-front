@@ -113,7 +113,7 @@ const App: React.FC = () => {
               <IonTabButton tab="" onClick={() => clickCreatePostButton()}>
                 <IonImg src="assets/icon/create.svg"></IonImg>
               </IonTabButton>
-              {profileState.profile.loaded ? (
+              {profileState.profile && profileState.profile.uuid !== '' ? (
                 <IonTabButton tab="notice" href="/notice">
                   <IonImg src="assets/icon/bell.svg"></IonImg>
                 </IonTabButton>
