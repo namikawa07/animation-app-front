@@ -66,6 +66,9 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   const [confirmPassword, setConfirmPassword] = useState<string>('')
   const [currentTab, setCurrentTab] = useState<string>('signup')
   const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const [isViewPassword, setIsViewPassword] = useState<boolean>(false)
+  const [isViewConfirmPassword, setIsViewConfirmPassword] =
+    useState<boolean>(false)
 
   const slideOpts = {
     initialSlide: currentSlide,
@@ -122,6 +125,31 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     if (index === 1) setCurrentTab('signin')
     if (index === 2) setCurrentTab('reset-password')
   }
+
+  const setViewPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+    if (isViewPassword) {
+      setIsViewPassword(false)
+    } else {
+      setIsViewPassword(true)
+    }
+  }
+
+  const setViewConfirmPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation()
+    if (isViewConfirmPassword) {
+      setIsViewConfirmPassword(false)
+    } else {
+      setIsViewConfirmPassword(true)
+    }
+  }
+
+  const EyeImageSrc = (isView: boolean) => {
+    if (isView) return 'assets/icon/eye.svg'
+    if (!isView) return 'assets/icon/eye-off.svg'
+  }
   // ------------------- function main -------------------
   // ------------------- function validation -------------------
   const validationEmail = (email: string) => {
@@ -144,16 +172,16 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     const value = (ev.target as HTMLInputElement).value
     setIsValidPassword(null)
     setPassword(value)
-    if (value === '') return
-    value.length > 5 ? setIsValidPassword(true) : setIsValidPassword(false)
+    value.length > 5 || value.length === 0
+      ? setIsValidPassword(true)
+      : setIsValidPassword(false)
   }
 
   const validateConfirmPassword = (ev: Event) => {
     const value = (ev.target as HTMLInputElement).value
     setIsValidConfirmPassword(null)
     setConfirmPassword(value)
-    if (value === '') return
-    confirmPassword === password
+    value === password || value.length === 0
       ? setIsValidConfirmPassword(true)
       : setIsValidConfirmPassword(false)
   }
@@ -226,14 +254,14 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   // ------------------- mini component -------------------
   const userNameInputArea = (
     <InputIonItem fill="solid">
-      <IonLabel position="stacked">ユーザー名</IonLabel>
-      <IonInput
+      <IonLabel position="floating">ユーザー名</IonLabel>
+      <SignupIonInput
         type="text"
         placeholder="ユーザー名"
         onIonInput={(event) => {
           inputUserName(event)
         }}
-      ></IonInput>
+      ></SignupIonInput>
     </InputIonItem>
   )
 
@@ -244,13 +272,13 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         isValidEmail === false && 'ion-invalid'
       }`}
     >
-      <IonLabel position="stacked">メールアドレス</IonLabel>
-      <IonInput
+      <IonLabel position="floating">メールアドレス</IonLabel>
+      <SignupIonInput
         type="email"
         placeholder="email@email.com"
         inputmode="email"
         onIonInput={(event) => validateEmail(event)}
-      ></IonInput>
+      ></SignupIonInput>
       <IonNote slot="error">メールアドレスの形式で入力してください</IonNote>
     </InputIonItem>
   )
@@ -262,13 +290,19 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         isValidPassword === false && 'ion-invalid'
       }`}
     >
-      <IonLabel position="stacked">パスワード</IonLabel>
-      <IonInput
-        type="password"
+      <IonLabel position="floating">パスワード</IonLabel>
+      <SignupIonInput
+        type={isViewPassword ? 'text' : 'password'}
         placeholder="password"
         onIonInput={(event) => validatePassword(event)}
-      ></IonInput>
+      ></SignupIonInput>
       <IonNote slot="error">パスワードは6文字以上にしてください</IonNote>
+      <EyeImage
+        onClick={(event: any) => {
+          setViewPassword(event)
+        }}
+        src={EyeImageSrc(isViewPassword)}
+      ></EyeImage>
     </InputIonItem>
   )
 
@@ -279,13 +313,19 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         isValidConfirmPassword === false && 'ion-invalid'
       }`}
     >
-      <IonLabel position="stacked">パスワード確認</IonLabel>
-      <IonInput
-        type="password"
+      <IonLabel position="floating">パスワード確認</IonLabel>
+      <SignupIonInput
+        type={isViewConfirmPassword ? 'text' : 'password'}
         placeholder="confirm password"
         onIonInput={(event) => validateConfirmPassword(event)}
-      ></IonInput>
+      ></SignupIonInput>
       <IonNote slot="error">パスワードと一致していません</IonNote>
+      <EyeImage
+        onClick={(event: any) => {
+          setViewConfirmPassword(event)
+        }}
+        src={EyeImageSrc(isViewConfirmPassword)}
+      ></EyeImage>
     </InputIonItem>
   )
 
@@ -316,7 +356,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   const resetPasswordButton = (
     <SignupIonButton
       expand="block"
-      disabled={!email}
+      disabled={!email || !isValidEmail}
       onClick={() => {
         firebaseAuthResetpassword()
       }}
@@ -472,6 +512,10 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
               </SignupGoogleIonButton>
             </>
           )}
+          <InfoIonItem>
+            <InfoLink slot="start">プライバシーポリシー</InfoLink>
+            <InfoLink slot="end">利用規約</InfoLink>
+          </InfoIonItem>
         </BackgroundInnerIonContent>
       </BackgroundIonContent>
     </IonModal>
@@ -486,9 +530,9 @@ export default SignupModal
 
 const InputIonItem = styled(IonItem)`
   --background: none;
-  border-bottom: 2px solid #b7e7ca;
   margin: 0px 24px 12px 24px;
   width: 90%;
+  border-bottom: 2px solid #b7e7ca;
 `
 
 const BackgroundIonContent = styled(IonContent)`
@@ -539,23 +583,12 @@ const SignupToggleButtonIonItem = styled(IonItem)`
 `
 
 const InputAreaIonSlides = styled(IonSlides)`
-  height: 350px;
+  height: auto;
 `
 
 const InputAreaIonSlide = styled(IonSlide)`
   flex-flow: column;
   justify-content: flex-start;
-`
-
-const SignupIonButton = styled(IonButton)`
-  margin: 0px 24px;
-  opacity: 1;
-  --background: #73bfb1;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 18px;
-  letter-spacing: 0.03em;
-  --border-radius: 21px;
 `
 
 const SignupGoogleIonButton = styled(IonButton)`
@@ -568,7 +601,19 @@ const SignupGoogleIonButton = styled(IonButton)`
   letter-spacing: 0.03em;
   --border-radius: 21px;
   --color: #000;
-  margin-bottom: 24px;
+`
+
+const SignupIonButton = styled(IonButton)`
+  margin: 40px 24px 0px 24px;
+  opacity: 1;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0.03em;
+  --border-radius: 21px;
+  --background-activated: #4d7d75;
+  --background: ${(props: { disabled: boolean }) =>
+    props.disabled ? '#BED7D2' : '#73bfb1'};
 `
 
 const PasswordResetIonText = styled(IonText)`
@@ -585,4 +630,27 @@ const GoogleIonImg = styled(IonImg)`
   width: 20px;
   height: 20px;
   margin-right: 18px;
+`
+
+const SignupIonInput = styled(IonInput)``
+const EyeImage = styled.img`
+  position: absolute;
+  right: 12px;
+  top: 40px;
+  z-index: 2;
+`
+
+const InfoIonItem = styled(IonItem)`
+  width: 100%;
+  padding: 0 36px;
+  margin-top: 20px;
+  margin-bottom: 170px;
+`
+
+const InfoLink = styled.a`
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 15px;
+  letter-spacing: 0.03em;
 `
