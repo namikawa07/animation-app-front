@@ -53,6 +53,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   // ------------------- data -------------------
   const modal = useRef<HTMLIonModalElement>(null)
   const mySlides = useRef<HTMLIonSlidesElement>(null)
+
   const [presentingElement, setPresentingElement] =
     useState<HTMLElement | null>(null)
   const [isValidEmail, setIsValidEmail] = useState<boolean | null>(null)
@@ -147,8 +148,8 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   }
 
   const EyeImageSrc = (isView: boolean) => {
-    if (isView) return 'assets/icon/eye.svg'
-    if (!isView) return 'assets/icon/eye-off.svg'
+    if (isView) return 'assets/icon/eye-off.svg'
+    if (!isView) return 'assets/icon/eye.svg'
   }
   // ------------------- function main -------------------
   // ------------------- function validation -------------------
@@ -202,6 +203,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
 
         dispatch(signUpUser(firebaseAuthParams))
         dispatch(closeSignupModal())
+        window.location.reload()
       })
       .catch((error) => {
         // firebaseへの外部接続が失敗した場合
@@ -220,6 +222,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         const firebaseAuthParams = {}
         dispatch(SignInUser(firebaseAuthParams))
         dispatch(closeSignupModal())
+        window.location.reload()
       })
       .catch((error) => {
         // firebaseへの外部接続が失敗した場合
@@ -536,8 +539,8 @@ const InputIonItem = styled(IonItem)`
 `
 
 const BackgroundIonContent = styled(IonContent)`
-  --background: url('/assets/icon/signup-background-test.png') no-repeat 100%
-    100%;
+  --background: url('/assets/icon/signup-background-test.png') center center /
+    cover no-repeat fixed;
 `
 
 const SlideItemIonItem = styled(IonItem)`
@@ -582,9 +585,7 @@ const SignupToggleButtonIonItem = styled(IonItem)`
   --padding-start: 0px;
 `
 
-const InputAreaIonSlides = styled(IonSlides)`
-  height: auto;
-`
+const InputAreaIonSlides = styled(IonSlides)``
 
 const InputAreaIonSlide = styled(IonSlide)`
   flex-flow: column;
@@ -644,7 +645,7 @@ const InfoIonItem = styled(IonItem)`
   width: 100%;
   padding: 0 36px;
   margin-top: 20px;
-  margin-bottom: 170px;
+  margin-bottom: 55%;
 `
 
 const InfoLink = styled.a`
