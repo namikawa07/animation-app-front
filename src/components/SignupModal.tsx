@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
+import styled from 'styled-components'
+import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'store'
 import {
   IonModal,
   IonContent,
-  IonList,
   IonItem,
   IonLabel,
   IonHeader,
@@ -20,8 +23,6 @@ import {
   IonThumbnail,
   IonImg,
 } from '@ionic/react'
-import { toast } from 'react-toastify'
-import styled from 'styled-components'
 import {
   auth,
   googleProvider,
@@ -36,11 +37,7 @@ import {
 } from 'firebase/auth'
 
 import { signUpUser, SignInUser } from 'slices/profileSlice'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'store'
-
 import { closeSignupModal } from '../../src/slices/global/signupModalSlice'
-
 import '../styles/SignupModal.css'
 
 interface SignupModalType {
@@ -52,6 +49,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   // ------------------- init -------------------
   const dispatch = useDispatch<AppDispatch>()
   // ------------------- init -------------------
+
   // ------------------- data -------------------
   const modal = useRef<HTMLIonModalElement>(null)
   const mySlides = useRef<HTMLIonSlidesElement>(null)
@@ -77,8 +75,8 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     initialSlide: currentSlide,
     speed: 400,
   }
-
   // ------------------- data -------------------
+
   // ------------------- file cycle  -------------------
   useEffect(() => {
     setCurrentTab('signup')
@@ -189,6 +187,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
       : setIsValidConfirmPassword(false)
   }
   // ------------------- function validation -------------------
+
   // ------------------- function firebase authentication -------------------
   const firebaseAuthSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -392,28 +391,6 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     </SignupIonButton>
   )
 
-  const AuthFormatUnit = () => {
-    if (currentTab === 'signup')
-      return (
-        <>
-          {userNameInputArea}
-          {EmailInputArea}
-          {passwordInputArea}
-          {confirmPasswordInputArea}
-        </>
-      )
-
-    if (currentTab === 'signin')
-      return (
-        <>
-          {EmailInputArea}
-          {passwordInputArea}
-        </>
-      )
-
-    if (currentTab === 'reset-password') return <>{EmailInputArea}</>
-  }
-
   const signupInputArea = () => {
     return (
       <>
@@ -567,12 +544,6 @@ const BackgroundIonContent = styled(IonContent)`
     cover no-repeat fixed;
 `
 
-const SlideItemIonItem = styled(IonItem)`
-  --background: none;
-  height: 100%;
-  --padding-start: 0px;
-  --inner-padding-end: 0px;
-`
 const LogoIonItem = styled(IonItem)`
   height: 90px;
   --background: none;

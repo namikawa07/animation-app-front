@@ -79,8 +79,13 @@ const App: React.FC = () => {
     setIsCreatePostModalOpen(false)
   }
 
+  const currentUserPresent =
+    profileState.profile &&
+    profileState.profile.uuid &&
+    profileState.profile.uuid !== ''
+
   const clickCreatePostButton = () => {
-    if (profileState.profile && profileState.profile.uuid !== '') {
+    if (currentUserPresent) {
       setIsCreatePostModalOpen(true)
     } else {
       dispatch(openSignupModal())
@@ -113,7 +118,7 @@ const App: React.FC = () => {
               <IonTabButton tab="" onClick={() => clickCreatePostButton()}>
                 <IonImg src="assets/icon/create.svg"></IonImg>
               </IonTabButton>
-              {profileState.profile && profileState.profile.uuid !== '' ? (
+              {currentUserPresent ? (
                 <IonTabButton tab="notice" href="/notice">
                   <IonImg src="assets/icon/bell.svg"></IonImg>
                 </IonTabButton>
