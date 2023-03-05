@@ -102,7 +102,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     dispatch(closeSignupModal())
   }
 
-  const onChangeTab = async (target: string) => {
+  const onTabChange = async (target: string) => {
     setCurrentTab(target)
     const swiper = await mySlides.current?.getSwiper()
     let index = 0
@@ -127,7 +127,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     if (index === 2) setCurrentTab('reset-password')
   }
 
-  const setViewPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleViewPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
     if (isViewPassword) {
       setIsViewPassword(false)
@@ -136,7 +136,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     }
   }
 
-  const setViewConfirmPassword = (
+  const toggleViewConfirmPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.stopPropagation()
@@ -147,7 +147,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
     }
   }
 
-  const EyeImageSrc = (isView: boolean) => {
+  const passwordViewerImageSrc = (isView: boolean) => {
     if (isView) return 'assets/icon/eye-off.svg'
     if (!isView) return 'assets/icon/eye.svg'
   }
@@ -325,9 +325,9 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
       <IonNote slot="error">パスワードは6文字以上にしてください</IonNote>
       <EyeImage
         onClick={(event: any) => {
-          setViewPassword(event)
+          toggleViewPassword(event)
         }}
-        src={EyeImageSrc(isViewPassword)}
+        src={passwordViewerImageSrc(isViewPassword)}
       ></EyeImage>
     </InputIonItem>
   )
@@ -348,9 +348,9 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
       <IonNote slot="error">パスワードと一致していません</IonNote>
       <EyeImage
         onClick={(event: any) => {
-          setViewConfirmPassword(event)
+          toggleViewConfirmPassword(event)
         }}
-        src={EyeImageSrc(isViewConfirmPassword)}
+        src={passwordViewerImageSrc(isViewConfirmPassword)}
       ></EyeImage>
     </InputIonItem>
   )
@@ -463,7 +463,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
               color="secondary"
               value={currentTab}
               onIonChange={(e) => {
-                onChangeTab(e.detail.value!)
+                onTabChange(e.detail.value!)
               }}
             >
               {currentTab === 'reset-password' ? (
