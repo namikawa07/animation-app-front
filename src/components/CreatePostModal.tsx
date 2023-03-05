@@ -24,6 +24,9 @@ import UserIcon from '../components/user/Icon'
 function CreatePostModal(props: any) {
   // ------------------- init -------------------
   const dispatch = useDispatch<AppDispatch>()
+  const profileState = useSelector((state: any) => {
+    return state.profileState
+  })
 
   const { isOpen, closeModal } = props
 
@@ -99,27 +102,43 @@ function CreatePostModal(props: any) {
     closeModal()
   }
 
+  const AccountImgSrc = () => {
+    if (profileState.profile && profileState.profile.thumbnail_url) {
+      if (profileState.profile.thumbnail_url === 'default-thumbnail-url') {
+        return `assets/icon/default-thumbnail.png`
+      } else {
+        return profileState.profile.thumbnail_url
+      }
+    } else {
+      return 'assets/icon/account.svg'
+    }
+  }
+
   return (
     <IonModal isOpen={isOpen}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>投稿</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={() => closeModal()}>閉じる</IonButton>
+          <IonButtons slot="start">
+            <IonButton onClick={() => closeModal()}>
+              <img src="assets/icon/close.svg"></img>
+            </IonButton>
           </IonButtons>
+          <IonTitle color="light">投稿</IonTitle>
         </IonToolbar>
       </IonHeader>
       <Wrapper>
         <HeadContents>
           <UserIconWrapper>
-            <UserIcon></UserIcon>
+            <UserIcon srcUrl={AccountImgSrc()}></UserIcon>
           </UserIconWrapper>
           <PublishStatusArea>
             <PublishStatusButton onClick={() => setShowActionSheet(true)}>
               <PublishStatusButtonText>
                 {publishStatus === 'publish' ? '公開' : '下書き'}
               </PublishStatusButtonText>
-              <PublishStatusButtonArrow>▼</PublishStatusButtonArrow>
+              <PublishStatusButtonArrow>
+                <img src="assets/icon/triangle.svg"></img>
+              </PublishStatusButtonArrow>
             </PublishStatusButton>
             {/*  <TagInputArea>
               <TagAddText>タグを追加...</TagAddText>
@@ -275,7 +294,7 @@ const PublishStatusButton = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #545454;
+  background: #f0f0f0;
   border-radius: 12px;
   border: 1px solid #b7e7ca;
   padding: 2px 12px;
@@ -286,10 +305,14 @@ const PublishStatusButtonText = styled.span`
   font-size: 12px;
   font-weight: 700;
   line-height: 14px;
+  color: #000;
 `
 
 const PublishStatusButtonArrow = styled.div`
-  font-size: 5px;
+  width: 8px;
+  height: 8px;
+  display: flex;
+  margin-left: 4px;
 `
 const TagPlusButton = styled.div`
   background: #87b599;
@@ -354,7 +377,9 @@ const DraftButton = styled.button`
   letter-spacing: 0.03em;
 `
 const UserIconWrapper = styled.div`
-  margin-right: 16px;
+  margin-right: 8px;
+  width: 34px;
+  height: 34px;
 `
 const TitleInputArea = styled.div`
   margin: 14px 0px;
