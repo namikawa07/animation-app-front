@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from '../store'
+import { useLocation } from 'react-router-dom'
+import styled from 'styled-components'
 import {
   IonHeader,
   IonToolbar,
@@ -9,12 +13,7 @@ import {
   IonThumbnail,
   IonItem,
 } from '@ionic/react'
-import { useLocation } from 'react-router-dom'
 import { locationType } from '../../src/types/global'
-import './Header.css'
-import { useDispatch, useSelector } from 'react-redux'
-import styled from 'styled-components'
-import { AppDispatch } from '../store'
 import { openSignupModal } from '../../src/slices/global/signupModalSlice'
 
 const Header: React.FC = () => {
@@ -57,6 +56,11 @@ const Header: React.FC = () => {
   // ------------------ useEffect ------------------
 
   // ------------------ methods ------------------
+  const currentUserPresent =
+    profileState.profile &&
+    profileState.profile.uuid &&
+    profileState.profile.uuid !== ''
+
   const clickAccount = () => {
     if (!profileState.profile || profileState.profile.uuid === '')
       dispatch(openSignupModal())
@@ -99,7 +103,7 @@ const Header: React.FC = () => {
           <SearchIonButtons slot="end">
             <SearchImg src="assets/icon/search.svg" />
           </SearchIonButtons>
-          {profileState.profile && profileState.profile.uuid !== '' ? (
+          {currentUserPresent ? (
             <IonButtons slot="end">
               <IonMenuToggle>
                 <AccountThumbnail>
