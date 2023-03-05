@@ -28,13 +28,6 @@ ion-segment-button.ios::part(indicator-background) {
   border-radius: 20px;
 }
 
-ion-label {
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 18px;
-  letter-spacing: 0.03em;
-}
-
 button-disabled {
   --background: #cfcfcf;
 }

@@ -280,7 +280,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
   // ------------------- mini component -------------------
   const userNameInputArea = (
     <InputIonItem fill="solid">
-      <IonLabel position="floating">ユーザー名</IonLabel>
+      <SignupIonLabel position="floating">ユーザー名</SignupIonLabel>
       <SignupIonInput
         type="text"
         placeholder="ユーザー名"
@@ -298,7 +298,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         isValidEmail === false && 'ion-invalid'
       }`}
     >
-      <IonLabel position="floating">メールアドレス</IonLabel>
+      <SignupIonLabel position="floating">メールアドレス</SignupIonLabel>
       <SignupIonInput
         type="email"
         placeholder="email@email.com"
@@ -316,7 +316,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         isValidPassword === false && 'ion-invalid'
       }`}
     >
-      <IonLabel position="floating">パスワード</IonLabel>
+      <SignupIonLabel position="floating">パスワード</SignupIonLabel>
       <SignupIonInput
         type={isViewPassword ? 'text' : 'password'}
         placeholder="password"
@@ -339,7 +339,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
         isValidConfirmPassword === false && 'ion-invalid'
       }`}
     >
-      <IonLabel position="floating">パスワード確認</IonLabel>
+      <SignupIonLabel position="floating">パスワード確認</SignupIonLabel>
       <SignupIonInput
         type={isViewConfirmPassword ? 'text' : 'password'}
         placeholder="confirm password"
@@ -468,15 +468,15 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
             >
               {currentTab === 'reset-password' ? (
                 <IonSegmentButton value={'reset-password'}>
-                  <IonLabel>パスワードリセット</IonLabel>
+                  <SignupIonLabel>パスワードリセット</SignupIonLabel>
                 </IonSegmentButton>
               ) : (
                 <IonSegmentButton value="signup">
-                  <IonLabel>新規登録</IonLabel>
+                  <SignupIonLabel>新規登録</SignupIonLabel>
                 </IonSegmentButton>
               )}
               <IonSegmentButton value={'signin'}>
-                <IonLabel>ログイン</IonLabel>
+                <SignupIonLabel>ログイン</SignupIonLabel>
               </IonSegmentButton>
             </SignupIonSegment>
           </SignupToggleButtonIonItem>
@@ -653,5 +653,12 @@ const InfoLink = styled.a`
   font-size: 13px;
   font-weight: 700;
   line-height: 15px;
+  letter-spacing: 0.03em;
+`
+
+const SignupIonLabel = styled(IonLabel)`
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18px;
   letter-spacing: 0.03em;
 `
