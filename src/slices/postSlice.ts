@@ -23,6 +23,7 @@ const initialState: any = {
     description: '',
     status: null,
     user: {},
+    hash_tags: []
   },
   loading: false,
   error: {

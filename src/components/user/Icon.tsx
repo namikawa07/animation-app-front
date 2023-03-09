@@ -5,7 +5,10 @@ function UserIcon(props: any) {
   const { srcUrl } = props
   return (
     <UserIconWrapper>
-      <img src="assets/icon/user-icon-wrapper.svg"></img>
+      <img
+        src="assets/icon/user-icon-wrapper.svg"
+        referrerPolicy="no-referrer"
+      ></img>
       <UserIconAvatar src={srcUrl} />
     </UserIconWrapper>
   )

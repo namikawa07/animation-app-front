@@ -113,7 +113,7 @@ const Header: React.FC = () => {
             </IonButtons>
           ) : (
             <IonButtons slot="end" onClick={clickAccount}>
-              <img src={AccountImg()} />
+              <img src={AccountImg()} referrerPolicy="no-referrer" />
             </IonButtons>
           )}
         </HomeIonToolbar>
