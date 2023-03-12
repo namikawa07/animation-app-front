@@ -446,7 +446,7 @@ const SignupModal: React.FC<SignupModalType> = ({ openPage, isSignupOpen }) => {
           )}
           <IonButtons slot="end">
             <IonButton color="medium" onClick={() => dismiss()}>
-              閉じる
+              <img src="assets/icon/close.svg"></img>
             </IonButton>
           </IonButtons>
         </IonToolbar>

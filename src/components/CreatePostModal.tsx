@@ -37,19 +37,20 @@ function CreatePostModal(props: any) {
   const [imageUrl, setImageUrl] = useState<string>('')
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [descriptionCount, setDescriptionCount] = useState<number>(0)
   const [isOverdescriptionCount, setIsOverDescriptionCount] =
     useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [publishStatus, setPublishStatus] = useState<string>('publish')
   const [showActionSheet, setShowActionSheet] = useState<boolean>(false)
   const [hashTags, setHashTags] = useState([])
+  const [remainDescriptionCount, setRemainDescriptionCount] =
+    useState<number>(280)
 
   const postState: any = useSelector((state: any) => {
     return state.postState
   })
 
-  const maxDescriptionCount = 140
+  const maxDescriptionCount = 280
 
   useEffect(() => {
     if (postState.loading === true && postState.error.status === false)
@@ -58,13 +59,15 @@ function CreatePostModal(props: any) {
 
   useEffect(() => {
     const descriptionLength: number =
-      twitter.parseTweet(description).weightedLength / 2
-    console.log(twitter.parseTweet(description).weightedLength)
+      twitter.parseTweet(description).weightedLength
+
     if (Number.isInteger(descriptionLength))
-      setDescriptionCount(descriptionLength || 0)
+      setRemainDescriptionCount(maxDescriptionCount - descriptionLength)
+
     descriptionLength > maxDescriptionCount
       ? setIsOverDescriptionCount(true)
       : setIsOverDescriptionCount(false)
+
     checkHashTagsInDescription(description)
   }, [description])
 
@@ -219,6 +222,7 @@ function CreatePostModal(props: any) {
               value={title}
               onIonChange={(e) => setTitle(e.detail.value!)}
               clearInput
+              color="light"
             ></TitleIonInput>
           </TitleInputIonItem>
         ) : (
@@ -239,7 +243,7 @@ function CreatePostModal(props: any) {
             slot="end"
             isOverdescriptionCount={isOverdescriptionCount}
           >
-            {descriptionCount}/{maxDescriptionCount}
+            {remainDescriptionCount <= 20 ? remainDescriptionCount : <></>}
           </DescriptionCountIonLabel>
         </DescriptionCountIonItem>
         {publishStatus === 'publish' ? (
@@ -285,6 +289,7 @@ export default CreatePostModal
 
 const Wrapper = styled.div`
   padding: 0px 16px;
+  overflow: scroll;
 `
 
 const VideoThumbnailInner = styled.div`
@@ -320,8 +325,10 @@ const VideoThumbnailText = styled.div`
 const ThumbnailVideoImage = styled.video`
   width: 100%;
   height: 100%;
+  max-height: calc((100vw - 32px) * 3 / 2);
   border-radius: 5px;
   border: 2px solid var(--moon-main);
+  object-fit: cover;
 `
 
 const ThumbnailVideoImageWrapper = styled.div`
@@ -349,6 +356,7 @@ const PublishStatusButton = styled.div`
   border: 1px solid #b7e7ca;
   padding: 2px 12px;
   max-width: 77px;
+  margin-left: 12px;
 `
 
 const PublishStatusButtonText = styled.span`
@@ -383,6 +391,7 @@ const PublishButton = styled.button`
     ${(props: { isPublish: boolean }) =>
       props.isPublish ? 'var(--moon-main)' : 'none'};
   color: var(--moon-white);
+  margin-bottom: 32px;
 `
 
 const DisableButton = styled.button`
@@ -409,8 +418,7 @@ const DraftButton = styled.button`
   line-height: 20px;
   letter-spacing: 0.03em;
 `
-const UserIconWrapper = styled.div`
-  margin-right: 8px;
+const UserIconWrapper = styled(IonItem)`
   width: 34px;
   height: 34px;
 `
@@ -466,6 +474,7 @@ const TagWrapperIonItem = styled.div`
   display: -webkit-box;
   overflow-x: scroll;
   width: calc(100vw - 26px - 34px - 8px);
+  padding-left: 12px;
 `
 
 const TagIonItem = styled(IonItem)`
