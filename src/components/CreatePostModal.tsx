@@ -35,6 +35,7 @@ function CreatePostModal(props: any) {
   const { isOpen, closeModal } = props
 
   const [imageUrl, setImageUrl] = useState<string>('')
+  const [image, setImage] = useState<any>(null)
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [isOverdescriptionCount, setIsOverDescriptionCount] =
@@ -85,21 +86,12 @@ function CreatePostModal(props: any) {
     setHashTags(hashTagArray)
   }
 
-  const handleChange = async (e: any) => {
+  const handleChangeFile = async (e: any) => {
     try {
       // 圧縮したらsizeは使わない方がいい
       const img = e.target.files[0]
-      const uid = img.size + img.name
-      const downloadType = 'videos'
-
-      const imageRef = ref(storage, `${downloadType}/${uid}`)
-      setLoading(true)
-      uploadBytes(imageRef, img).then(() => {
-        getDownloadURL(imageRef).then((url) => {
-          setImageUrl(url)
-          setLoading(false)
-        })
-      })
+      setImageUrl(window.URL.createObjectURL(img))
+      setImage(img)
     } catch (err) {
       console.log(err)
     }
@@ -108,17 +100,45 @@ function CreatePostModal(props: any) {
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     if (!isPublish()) return
+    if (!image) return
 
-    const post = {
-      contents_type: 'video',
-      url: imageUrl,
-      title: title,
-      description: description,
-      status: publishStatus,
-      hash_tags: hashTags
+    try {
+      const uid = image.size + image.name
+
+      let downloadType: string
+      switch (image.type) {
+        case 'image/gif':
+          downloadType = 'images'
+          break
+        case 'image/png':
+          downloadType = 'images'
+          break
+        case 'image/jpeg':
+          downloadType = 'images'
+          break
+        default:
+          downloadType = 'videos'
+      }
+
+      const imageRef = ref(storage, `${downloadType}/${uid}`)
+      setLoading(true)
+      uploadBytes(imageRef, image).then(() => {
+        getDownloadURL(imageRef).then((url) => {
+          const post = {
+            contents_type: 'video',
+            url: url,
+            title: title,
+            description: description,
+            status: publishStatus,
+            hash_tags: hashTags,
+          }
+          dispatch(createPost(post))
+          setLoading(false)
+        })
+      })
+    } catch (err) {
+      console.log(err)
     }
-
-    dispatch(createPost(post))
   }
 
   const isPublish = () => {
@@ -158,6 +178,13 @@ function CreatePostModal(props: any) {
 
   return (
     <IonModal isOpen={isOpen}>
+      {loading ? (
+        <LoadingBox sx={{ display: 'flex' }}>
+          <CircularProgress color="inherit" />
+        </LoadingBox>
+      ) : (
+        <></>
+      )}
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -191,7 +218,12 @@ function CreatePostModal(props: any) {
         </HeadContents>
         <div>
           <label>
-            <input type="file" hidden onChange={handleChange} />
+            <input
+              type="file"
+              accept="image/gif, image/png, image/jpeg, video/mp4, video/*"
+              hidden
+              onChange={handleChangeFile}
+            />
             {imageUrl && imageUrl !== '' ? (
               <ThumbnailVideoImageWrapper>
                 <ThumbnailVideoImage src={imageUrl}></ThumbnailVideoImage>
@@ -199,16 +231,8 @@ function CreatePostModal(props: any) {
               </ThumbnailVideoImageWrapper>
             ) : (
               <VideoThumbnailInner>
-                {loading ? (
-                  <Box sx={{ display: 'flex' }}>
-                    <CircularProgress color="inherit" />
-                  </Box>
-                ) : (
-                  <>
-                    <VideoThumbnailImg src="assets/icon/upload.svg" />
-                    <VideoThumbnailText>動画を選択する</VideoThumbnailText>
-                  </>
-                )}
+                <VideoThumbnailImg src="assets/icon/upload.svg" />
+                <VideoThumbnailText>動画を選択する</VideoThumbnailText>
               </VideoThumbnailInner>
             )}
           </label>
@@ -287,6 +311,15 @@ function CreatePostModal(props: any) {
 
 export default CreatePostModal
 
+const LoadingBox = styled(Box)`
+  position: fixed;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+`
 const Wrapper = styled.div`
   padding: 0px 16px;
   overflow: scroll;
