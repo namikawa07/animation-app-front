@@ -5,7 +5,10 @@ function UserIcon(props: any) {
   const { srcUrl } = props
   return (
     <UserIconWrapper>
-      <img src="assets/icon/user-icon-wrapper.svg"></img>
+      <img
+        src="assets/icon/user-icon-wrapper.svg"
+        referrerPolicy="no-referrer"
+      ></img>
       <UserIconAvatar src={srcUrl} />
     </UserIconWrapper>
   )
@@ -24,6 +27,5 @@ const UserIconAvatar = styled.img`
   top: 3px;
   left: 3px;
   width: calc(100% - 6px);
-  height: calc(100% - 6px);
   border-radius: 50%;
 `

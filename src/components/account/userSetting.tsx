@@ -114,7 +114,6 @@ const UserSetting: React.FC = () => {
           <IonItem>
             <IonLabel position="stacked">名前</IonLabel>
             <IonInput value={name} onIonChange={(e) => setName(e.detail.value)}>
-              {' '}
             </IonInput>
           </IonItem>
           <IonItem>

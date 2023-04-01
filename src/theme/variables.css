@@ -80,9 +80,34 @@ http://ionicframework.com/docs/theming/ */
   --color: #000;
   --padding-start: 0px;
   --inner-padding-end: 0px;
+
+  --moon-white: #fff;
+  --moon-black: #515151;
+  --moon-main: #58a786;
+  --moon-sub: #73bfb1;
+  --moon-gray-white: #d7d7d7;
+  --moon-gray-white2: #f0f0f0;
+  --moon-red: red;
 }
 ion-item {
   --background: none;
+  --border-color: rgba(0, 0, 0, 0);
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+}
+
+.action-sheet-button {
+  --button-background: var(--moon-white);
+  --background: var(--moon-white);
+  --button-background-selected: var(--moon-white);
+  --button-color: var(--moon-black);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--moon-main);
+}
+
+.action-sheet-selected {
+  --button-color-selected: var(--moon-main);
 }
 
 @media (prefers-color-scheme: dark) {
