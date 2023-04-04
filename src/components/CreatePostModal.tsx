@@ -130,7 +130,7 @@ function CreatePostModal(props: any) {
             title: title,
             description: description,
             status: publishStatus,
-            hash_tags: hashTags,
+            tag_contents: hashTags,
           }
           dispatch(createPost(post))
           setLoading(false)

@@ -46,5 +46,5 @@ const VideoContentList: React.FC = () => {
 export default VideoContentList
 
 const VideoContentListItemWrapper = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 `
