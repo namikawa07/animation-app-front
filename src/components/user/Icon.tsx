@@ -26,6 +26,6 @@ const UserIconAvatar = styled.img`
   position: absolute;
   top: 3px;
   left: 3px;
-  width: calc(100% - 6px);
+  width: calc(100% - 6px) !important;
   border-radius: 50%;
 `

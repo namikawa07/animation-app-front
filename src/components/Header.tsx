@@ -124,8 +124,10 @@ const Header: React.FC = () => {
 
 export default Header
 
+
 const HomeIonToolbar = styled(IonToolbar)`
   padding: 0px 8px;
+  --border-width: 0px !important;
 `
 
 const SearchIonButtons = styled(IonButtons)`
