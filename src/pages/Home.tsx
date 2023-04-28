@@ -54,16 +54,16 @@ const Home: React.FC = () => {
         value={currentTab}
         onIonChange={(e) => onTabChange(e.detail.value!)}
       >
-        <HomeIonSegmentButton
-          value={'recommend'}
-        >
-          <SegmentTitle isActive={currentTab === 'recommend' ? true : false}>おすすめ</SegmentTitle>
+        <HomeIonSegmentButton value={'recommend'}>
+          <SegmentTitle isActive={currentTab === 'recommend' ? true : false}>
+            おすすめ
+          </SegmentTitle>
         </HomeIonSegmentButton>
 
-        <HomeIonSegmentButton
-          value={'follower'}
-        >
-          <SegmentTitle isActive={currentTab === 'follower' ? true : false}>フォロワー</SegmentTitle>
+        <HomeIonSegmentButton value={'follower'}>
+          <SegmentTitle isActive={currentTab === 'follower' ? true : false}>
+            フォロワー
+          </SegmentTitle>
         </HomeIonSegmentButton>
       </HomeIonSegment>
       <HomeIonSlides
@@ -72,12 +72,12 @@ const Home: React.FC = () => {
         onIonSlideDidChange={(e) => onSlideChange(e)}
       >
         <HomeIonSlide>
-          <IonContent>
+          <IonContent scrollY={true}>
             <VideoContentList></VideoContentList>
           </IonContent>
         </HomeIonSlide>
         <HomeIonSlide>
-          <IonContent>
+          <IonContent scrollY={true}>
             <VideoContentList></VideoContentList>
           </IonContent>
         </HomeIonSlide>
@@ -97,7 +97,7 @@ const HomeIonSlides = styled(IonSlides)`
 `
 
 const HomeIonSlide = styled(IonSlide)`
-  height: 100vh;
+  height: 100%;
   width: 100vw;
 `
 const HomeIonSegment = styled(IonSegment)`
@@ -109,7 +109,7 @@ const HomeIonSegmentButton = styled(IonSegmentButton)`
   background: var(--moon-white);
   --indicator-box-shadow: none;
   --border-radius: 0px;
-  box-sizing:content-box;
+  box-sizing: content-box;
   margin-top: 0px;
   margin-bottom: 0px;
 `
@@ -117,7 +117,7 @@ const SegmentTitle = styled.span`
   width: 100px;
   height: 28px;
   ${(props: { isActive: boolean }) =>
-  props.isActive
-    ? 'color: var(--moon-main); border-bottom: 3px solid var(--moon-main);'
-    : 'color: var(--moon-gray);'};
+    props.isActive
+      ? 'color: var(--moon-main); border-bottom: 3px solid var(--moon-main);'
+      : 'color: var(--moon-gray);'};
 `

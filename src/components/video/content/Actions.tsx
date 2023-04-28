@@ -51,8 +51,8 @@ const ActionButton = styled.div`
 `
 
 const ActionImg = styled(IonImg)`
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   margin: 0px 5px;
 `
 const Separtor = styled.div`

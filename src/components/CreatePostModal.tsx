@@ -100,7 +100,7 @@ function CreatePostModal(props: any) {
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     if (!isPublish()) return
-    if (!image) return
+    if (!image || !title) return
 
     try {
       const uid = image.size + image.name
@@ -151,6 +151,8 @@ function CreatePostModal(props: any) {
     } else if (title && (!imageUrl || imageUrl === '')) {
       return false
     } else if (description.length > 160) {
+      return false
+    } else if (!title || title === '') {
       return false
     } else {
       return true
